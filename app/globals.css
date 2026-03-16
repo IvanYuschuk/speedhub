@@ -15,14 +15,11 @@
   --header-register-btn-bg-hover: rgba(255, 255, 255, 0.25);
   --header-register-btn-border: rgba(255, 255, 255, 0.3);
 
-  /* Основні кольори секцій */
     --section-bg: #ffffff;
     --section-text-title: #0f172a;
     --section-text-desc: #475569;
     --section-accent: #0ea5e9;
-    /* Трохи темніший блакитний для світлого фону */
   
-    /* Кнопка Hero */
     --section-btn-bg: #0ea5e9;
     --section-btn-text: #ffffff;
     --section-btn-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
@@ -30,14 +27,12 @@
     --section-btn-hover-text: #ffffff;
     --section-btn-hover-shadow: 0 8px 24px rgba(15, 23, 42, 0.2);
   
-    /* Зображення та Бейдж Hero */
     --section-img-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     --section-badge-bg: #ffffff;
     --section-badge-border: rgba(15, 23, 42, 0.1);
     --section-badge-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     --section-badge-text: #0f172a;
   
-    /* Картки FAQ */
     --section-card-bg: #f8fafc;
     --section-card-border: rgba(15, 23, 42, 0.05);
     --section-card-hover-bg: #ffffff;

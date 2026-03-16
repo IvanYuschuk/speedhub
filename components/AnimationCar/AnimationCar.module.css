@@ -1,0 +1,57 @@
+.section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 40px;
+}
+
+@keyframes streamline {
+    100% {
+        stroke-dashoffset: 2000px;
+    }
+}
+
+.stream {
+    stroke-dasharray: 1000px;
+    stroke-dashoffset: 0px;
+    animation: streamline 1.5s linear infinite;
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.rimPattern {
+    transform-origin: center center;
+    transform-box: fill-box;
+    animation: spin 0.7s linear infinite;
+}
+
+
+@keyframes rumble {
+  0% { transform: rotate(0deg); }
+  25% { transform: translate(1px, 0px) rotate(-0.3deg); }
+  50% { transform: translate(0px, -1px) rotate(0deg); }
+  75% { transform: translate(-1px, 0px) rotate(0.3deg); }
+  100% { transform: translate(0px, 1px) rotate(0deg); }
+}
+
+
+.groupBody {
+    transform-origin: center center;
+    transform-box: fill-box;
+}
+
+@keyframes streakAnim {
+    100% {
+        d: path("m270.81 171.77 58.288 94.061h24.17l-68.056-94.061zm21.698 0 64.579 94.061h6.1955l-68.058-94.061z");
+    }
+}
+
+.streak {
+    animation: streakAnim 1s linear infinite;
+}

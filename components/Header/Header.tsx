@@ -27,22 +27,17 @@ const Header = () => {
     return (
         <header className={css.header}>
             <div className={css.container}>
-                {/* =========================================
-                    1. ЛОГОТИП (Завжди видимий)
-                    ========================================= */}
+
                 <Link href="/" className={css.logo} onClick={closeMenu}>
                     <span className={css.icon}>🚀</span>
                     <span className={css.title}>Speed<span className={css.titleSmall}>hub</span></span>
                 </Link>
 
-                {/* =========================================
-                    2. ДЕСКТОПНА НАВІГАЦІЯ (Видима тільки на ПК)
-                    ========================================= */}
                 <nav className={css.desktopNav}>
                     <ul className={css.desktopNavList}>
                         <li><Link className={css.navLink} href="/">Головна</Link></li>
                         <li><Link className={css.navLink} href="/lectures">Лекції</Link></li>
-                        <li><Link className={css.navLink} href="/about">Про нас</Link></li>
+                        <li><Link className={css.navLink} href="/tests">Тести</Link></li>
                         <li><Link className={css.navLink} href="/mistakes">Робота над помилками</Link></li>
                     </ul>
                 </nav>
@@ -63,7 +58,6 @@ const Header = () => {
                         </ul>
                     </div>
 
-                    {/* Бургер-кнопка (Видима на Мобілці та Планшеті) */}
                     <button type="button" className={css.burgerBtn} onClick={toggleMenu} aria-label="Меню">
                         {isOpen ? (
                             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -81,24 +75,18 @@ const Header = () => {
                 </div>
             </div>
 
-            {/* =========================================
-                4. ВИЇЗНЕ МЕНЮ (Для Мобілок та Планшетів)
-                ========================================= */}
             {isOpen && (
                 <>
-                    {/* Темний фон позаду меню */}
                     <div className={css.backdrop} onClick={closeMenu}></div>
                     
-                    {/* Сама панель меню */}
                     <div className={css.drawer}>
                         <div className={css.drawerContent}>
                             
-                            {/* Навігація в мобільному/планшетному меню */}
                             <nav>
                                 <ul className={css.mobileNavList}>
                                     <li><Link className={css.navLink} href="/" onClick={closeMenu}>Головна</Link></li>
                                     <li><Link className={css.navLink} href="/lectures" onClick={closeMenu}>Лекції</Link></li>
-                                    <li><Link className={css.navLink} href="/about" onClick={closeMenu}>Про нас</Link></li>
+                                    <li><Link className={css.navLink} href="/tests" onClick={closeMenu}>Тести</Link></li>
                                     <li><Link className={css.navLink} href="/mistakes" onClick={closeMenu}>Робота над помилками</Link></li>
                                 </ul>
                             </nav>
