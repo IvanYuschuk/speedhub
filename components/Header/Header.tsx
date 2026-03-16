@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link'; // або 'react-router-dom'
+import Link from 'next/link'; 
 import css from './Header.module.css';
 
 const Header = () => {
@@ -10,14 +10,18 @@ const Header = () => {
     const toggleMenu = () => setIsOpen(!isOpen);
     const closeMenu = () => setIsOpen(false);
 
-    // Блокуємо скрол сторінки, коли мобільне/планшетне меню відкрите
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden';
         } else {
-            document.body.style.overflow = 'unset';
+            document.body.style.overflow = '';
+             document.documentElement.style.overflow = '';
         }
-        return () => { document.body.style.overflow = 'unset'; };
+        return () => {
+            document.body.style.overflow = '';
+             document.documentElement.style.overflow = '';
+        };
     }, [isOpen]);
 
     return (

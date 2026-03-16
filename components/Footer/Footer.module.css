@@ -1,8 +1,7 @@
-
 .footer {
-    background: linear-gradient(90deg, #0f172a 0%, #1e293b 100%);
+    background: var(--header-footer-bg);
     padding: 40px 0 32px 0;
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 -4px 20px var(--header-footer-shadow);
     margin-top: auto;
 }
 
@@ -25,14 +24,14 @@
 }
 
 .title {
-    color: #ffffff;
+    color: var(--header-logo-burger);
     font-size: 24px;
     font-weight: 700;
     letter-spacing: -0.5px;
 }
 
 .titleSmall {
-    color: #38bdf8;
+    color: var(--header-footer-hub);
 }
 
 .textList {
@@ -46,7 +45,7 @@
 }
 
 .textList li {
-    color: #f8fafc;
+    color: var(--header-links-footer-text);
     font-size: 15px;
     font-weight: 400;
     display: flex;
@@ -58,7 +57,6 @@
     font-size: 14px;
 }
 
-
 @media (min-width: 768px) {
     .textList {
         flex-direction: row;
@@ -67,7 +65,7 @@
 
     .textList li:not(:last-child)::after {
         content: "|";
-        color: #475569;
+        color: var(--header-links-footer-text);
         margin: 0 24px;
     }
 }

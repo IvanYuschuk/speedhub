@@ -1,17 +1,99 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --header-footer-bg: linear-gradient(90deg, #0284c7 0%, #0278b3 100%);
+  --header-footer-shadow: rgba(2, 132, 199, 0.3);
+  --header-logo-burger: #ffffff;
+  --header-footer-hub: #38bdf8;
+  --header-links-footer-text: rgba(255, 255, 255, 0.75);
+  --header-links-hover: #ffffff;
+  --header-backdrop: rgba(2, 132, 199, 0.6);
+  --header-drawer: #0278b3;
+  --header-login-btn-text: #0278b3;
+  --header-login-btn-bg: #ffffff;
+  --header-login-btn-bg-hover: #f0f9ff;
+  --header-register-btn-text: #ffffff;
+  --header-register-btn-bg: rgba(255, 255, 255, 0.15);
+  --header-register-btn-bg-hover: rgba(255, 255, 255, 0.25);
+  --header-register-btn-border: rgba(255, 255, 255, 0.3);
+
+  /* Основні кольори секцій */
+    --section-bg: #ffffff;
+    --section-text-title: #0f172a;
+    --section-text-desc: #475569;
+    --section-accent: #0ea5e9;
+    /* Трохи темніший блакитний для світлого фону */
+  
+    /* Кнопка Hero */
+    --section-btn-bg: #0ea5e9;
+    --section-btn-text: #ffffff;
+    --section-btn-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+    --section-btn-hover-bg: #0f172a;
+    --section-btn-hover-text: #ffffff;
+    --section-btn-hover-shadow: 0 8px 24px rgba(15, 23, 42, 0.2);
+  
+    /* Зображення та Бейдж Hero */
+    --section-img-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    --section-badge-bg: #ffffff;
+    --section-badge-border: rgba(15, 23, 42, 0.1);
+    --section-badge-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --section-badge-text: #0f172a;
+  
+    /* Картки FAQ */
+    --section-card-bg: #f8fafc;
+    --section-card-border: rgba(15, 23, 42, 0.05);
+    --section-card-hover-bg: #ffffff;
+    --section-card-hover-border: rgba(14, 165, 233, 0.3);
+    --section-card-hover-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    --section-icon-bg: rgba(14, 165, 233, 0.1);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0b0f19;
-    --foreground: #ededed;
+      --header-footer-bg: linear-gradient(90deg, #0f172a 0%, #1e293b 100%);
+      --header-footer-shadow: rgba(0, 0, 0, 0.4);
+      --header-logo-burger: #ffffff;
+      --header-footer-hub: #38bdf8;
+      --header-links-footer-text: #94a3b8;
+      --header-links-hover: #ffffff;
+      --header-backdrop: rgba(15, 23, 42, 0.95);
+      --header-drawer: #1e293b;
+      --header-login-btn-text: #0f172a;
+      --header-login-btn-bg: #ffffff;
+      --header-login-btn-bg-hover: #f8fafc;
+      --header-register-btn-text: #ffffff;
+      --header-register-btn-bg: rgba(255, 255, 255, 0.08);
+      --header-register-btn-bg-hover: rgba(255, 255, 255, 0.15);
+      --header-register-btn-border: rgba(255, 255, 255, 0.15);
+
+      --section-bg: #0b0f19;
+      --section-text-title: #ffffff;
+      --section-text-desc: #94a3b8;
+      --section-accent: #38bdf8;
+      
+      --section-btn-bg: #38bdf8;
+      --section-btn-text: #ffffff;
+      --section-btn-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+      --section-btn-hover-bg: #f8fafc;
+      --section-btn-hover-text: #0f172a;
+      --section-btn-hover-shadow: 0 8px 24px rgba(255, 255, 255, 0.2);
+      
+      --section-img-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      --section-badge-bg: #1e293b;
+      --section-badge-border: rgba(255, 255, 255, 0.1);
+      --section-badge-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      --section-badge-text: #f8fafc;
+      
+      --section-card-bg: rgba(255, 255, 255, 0.03);
+      --section-card-border: rgba(255, 255, 255, 0.08);
+      --section-card-hover-bg: rgba(255, 255, 255, 0.06);
+      --section-card-hover-border: rgba(56, 189, 248, 0.3);
+      --section-card-hover-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      --section-icon-bg: rgba(56, 189, 248, 0.1);
   }
 }
 
 html,
 body {
+  background-color: var(--section-bg);
   max-width: 100vw;
   overflow-x: hidden;
 }
