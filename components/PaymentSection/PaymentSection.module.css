@@ -1,0 +1,118 @@
+.section {
+    padding: 80px 0;
+    background-color: var(--section-bg);
+    transition: background-color 0.3s ease;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: center;
+}
+
+.ctaCard {
+    background: var(--section-card-bg);
+    border: 1px solid var(--section-card-border);
+    border-radius: 32px;
+    padding: 64px 40px;
+    text-align: center;
+    max-width: 900px;
+    width: 100%;
+    box-shadow: var(--section-img-shadow);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.iconWrapper {
+    font-size: 48px;
+    margin-bottom: 24px;
+    line-height: 1;
+    animation: pulse 2s infinite;
+}
+
+.heading {
+    color: var(--section-text-title);
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 800;
+    margin-bottom: 24px;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    transition: color 0.3s ease;
+}
+
+.highlight {
+    color: var(--section-accent);
+}
+
+.text {
+    color: var(--section-text-desc);
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0 auto 40px auto;
+    max-width: 700px;
+    transition: color 0.3s ease;
+}
+
+.text strong {
+    color: var(--section-text-title);
+    font-weight: 600;
+}
+
+.button {
+    display: inline-block;
+    padding: 16px 40px;
+    border-radius: 999px;
+    font-size: 18px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    text-decoration: none;
+    background-color: var(--section-btn-bg);
+    color: var(--section-btn-text);
+    box-shadow: var(--section-btn-shadow);
+    transition: all 0.3s ease;
+}
+
+.button:hover {
+    background-color: var(--section-btn-hover-bg);
+    color: var(--section-btn-hover-text);
+    transform: translateY(-4px);
+    box-shadow: var(--section-btn-hover-shadow);
+}
+
+/* =========================================
+   АНІМАЦІЇ ТА АДАПТИВНІСТЬ
+   ========================================= */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 768px) {
+    .ctaCard {
+        padding: 40px 24px;
+        border-radius: 24px;
+    }
+
+    .button {
+        width: 100%;
+        text-align: center;
+    }
+}

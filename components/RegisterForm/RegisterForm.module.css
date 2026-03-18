@@ -1,0 +1,161 @@
+.closeBtn {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    background: none;
+    border: none;
+    color: var(--section-text-desc);
+    font-size: 20px;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.closeBtn:hover {
+    background: var(--section-card-hover-border);
+    color: var(--section-text-title);
+}
+
+/* =========================================
+   ЗАГОЛОВКИ
+   ========================================= */
+.title {
+    color: var(--section-text-title);
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+}
+
+.subtitle {
+    color: var(--section-text-desc);
+    font-size: 15px;
+    margin-bottom: 32px;
+}
+
+/* =========================================
+   ФОРМА ТА ІНПУТИ
+   ========================================= */
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.label {
+    color: var(--section-text-title);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.input {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: transparent;
+    border: 1px solid var(--section-card-border);
+    color: var(--section-text-title);
+    font-size: 15px;
+    font-family: inherit;
+    transition: all 0.3s ease;
+}
+
+/* Стиль плейсхолдера */
+.input::placeholder {
+    color: var(--section-text-desc);
+    opacity: 0.6;
+}
+
+/* Стан інпуту при натисканні (фокус) */
+.input:focus {
+    outline: none;
+    border-color: var(--section-accent);
+    box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+}
+
+/* =========================================
+   КНОПКИ
+   ========================================= */
+.submitBtn {
+    margin-top: 12px;
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+    background-color: var(--section-btn-bg);
+    color: var(--section-btn-text);
+    font-size: 16px;
+    font-weight: 600;
+    font-family: inherit;
+    border: none;
+    cursor: pointer;
+    box-shadow: var(--section-btn-shadow);
+    transition: all 0.3s ease;
+}
+
+.submitBtn:hover {
+    background-color: var(--section-btn-hover-bg);
+    color: var(--section-btn-hover-text);
+    transform: translateY(-2px);
+    box-shadow: var(--section-btn-hover-shadow);
+}
+
+/* =========================================
+   ПЕРЕМИКАЧ МІЖ МОДАЛКАМИ
+   ========================================= */
+.switchText {
+    margin-top: 24px;
+    text-align: center;
+    color: var(--section-text-desc);
+    font-size: 14px;
+}
+
+.switchBtn {
+    background: none;
+    border: none;
+    color: var(--section-accent);
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.3s ease;
+}
+
+.switchBtn:hover {
+    text-decoration: underline;
+}
+
+/* =========================================
+   АНІМАЦІЇ ПОЯВИ
+   ========================================= */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}

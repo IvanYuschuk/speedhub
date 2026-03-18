@@ -3,12 +3,21 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link'; 
 import css from './Header.module.css';
+import ModalSection from '../ModalSection/ModalSection';
+import RegisterForm from '../RegisterForm/RegisterForm';
+import LoginForm from '../LoginForm/LoginForm';
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleMenu = () => setIsOpen(!isOpen);
     const closeMenu = () => setIsOpen(false);
+
+    const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
+        if (event.target === event.currentTarget) {
+            closeMenu();
+        }
+    }
 
     useEffect(() => {
         if (isOpen) {
@@ -24,7 +33,18 @@ const Header = () => {
         };
     }, [isOpen]);
 
+    const [isopenModal, setIsOpenModal] = useState(false);
+
+    const openModal = () => setIsOpenModal(true);
+    const closeModal = () => setIsOpenModal(false)
+
+    const [isRegisterModal, setIsRegisterModal] = useState<boolean | null>(null);
+
+    const registerModal = () => setIsRegisterModal(true);
+    const loginModal = () => setIsRegisterModal(false);
+
     return (
+        <>
         <header className={css.header}>
             <div className={css.container}>
 
@@ -50,10 +70,17 @@ const Header = () => {
                     <div className={css.desktopButtons}>
                         <ul className={css.desktopButtonsList}>
                             <li>
-                                <button type="button" className={`${css.button} ${css.loginButton}`}>Увійти</button>
+                                    <button type="button" className={`${css.button} ${css.loginButton}`} onClick={() => {
+                                        loginModal();
+                                        openModal();
+                                    }
+                                    }>Увійти</button>
                             </li>
                             <li>
-                                <button type="button" className={`${css.button} ${css.registerButton}`}>Зареєструватись</button>
+                                    <button type="button" className={`${css.button} ${css.registerButton}`} onClick={() => {
+                                        registerModal();
+                                        openModal();
+                                }}>Зареєструватись</button>
                             </li>
                         </ul>
                     </div>
@@ -77,7 +104,7 @@ const Header = () => {
 
             {isOpen && (
                 <>
-                    <div className={css.backdrop} onClick={closeMenu}></div>
+                    <div className={css.backdrop} onClick={handleBackdropClick}></div>
                     
                     <div className={css.drawer}>
                         <div className={css.drawerContent}>
@@ -95,12 +122,20 @@ const Header = () => {
                             <div className={css.mobileOnlyButtons}>
                                 <ul className={css.mobileButtonsList}>
                                     <li>
-                                        <button type="button" className={`${css.button} ${css.loginButton} ${css.fullWidthBtn}`} onClick={closeMenu}>
+                                            <button type="button" className={`${css.button} ${css.loginButton} ${css.fullWidthBtn}`} onClick={() => {
+                                                closeMenu();
+                                                loginModal();
+                                                openModal();
+                                        }}>
                                             Увійти
                                         </button>
                                     </li>
                                     <li>
-                                        <button type="button" className={`${css.button} ${css.registerButton} ${css.fullWidthBtn}`} onClick={closeMenu}>
+                                            <button type="button" className={`${css.button} ${css.registerButton} ${css.fullWidthBtn}`} onClick={() => {
+                                                closeMenu();
+                                                registerModal();
+                                                openModal();
+                                        }}>
                                             Зареєструватись
                                         </button>
                                     </li>
@@ -111,7 +146,11 @@ const Header = () => {
                     </div>
                 </>
             )}
-        </header>
+            </header>
+            {isopenModal && <ModalSection onClose={closeModal}>
+                {isRegisterModal ? <RegisterForm onClose={closeModal} /> : <LoginForm onClose={closeModal} />}
+            </ModalSection>}
+        </>
     );
 };
 

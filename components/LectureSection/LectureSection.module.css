@@ -159,9 +159,10 @@
 
 .rightCol {
     width: 100%;
-        max-width: 500px;
-        display: flex;
-        flex-direction: column;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
 }
 
 .imageContainer {
