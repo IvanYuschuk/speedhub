@@ -2,9 +2,10 @@ import css from "./RegisterForm.module.css";
 
 interface RegisterFormProps {
     onClose: () => void;
+    onOpen: () => void;
 }
 
-export default function RegisterForm({onClose}: RegisterFormProps) {
+export default function RegisterForm({onClose, onOpen}: RegisterFormProps) {
     return (
         <>
             <button type="button" className={css.closeBtn} onClick={onClose} aria-label="Закрити">
@@ -53,7 +54,7 @@ export default function RegisterForm({onClose}: RegisterFormProps) {
 
                 <p className={css.switchText}>
                     Вже є акаунт?{' '}
-                    <button type="button" className={css.switchBtn} onClick={() => {}}>
+                    <button type="button" className={css.switchBtn} onClick={onOpen}>
                         Увійти
                     </button>
                 </p>

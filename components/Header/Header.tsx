@@ -148,7 +148,15 @@ const Header = () => {
             )}
             </header>
             {isopenModal && <ModalSection onClose={closeModal}>
-                {isRegisterModal ? <RegisterForm onClose={closeModal} /> : <LoginForm onClose={closeModal} />}
+                {isRegisterModal ? <RegisterForm onClose={closeModal} onOpen={() => {
+                    closeModal();
+                    loginModal();
+                    openModal();
+                }}/> : <LoginForm onClose={closeModal} onOpen={() => {
+                    closeModal();
+                    registerModal();
+                    openModal();
+                }}/>}
             </ModalSection>}
         </>
     );

@@ -2,9 +2,10 @@ import css from "./LoginForm.module.css"
 
 interface LoginFormProps {
     onClose: () => void;
+    onOpen: () => void;
 }
 
-export default function LoginForm({ onClose }: LoginFormProps) {
+export default function LoginForm({ onClose, onOpen}: LoginFormProps) {
     return (
         <>
             <button type="button" className={css.closeBtn} onClick={onClose} aria-label="Закрити">
@@ -42,7 +43,7 @@ export default function LoginForm({ onClose }: LoginFormProps) {
 
                 <p className={css.switchText}>
                     Ще не зареєстровані?{' '}
-                    <button type="button" className={css.switchBtn} onClick={() => {}}>
+                    <button type="button" className={css.switchBtn} onClick={onOpen}>
                         Створити акаунт
                     </button>
                 </p>
