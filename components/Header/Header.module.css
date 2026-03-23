@@ -249,3 +249,33 @@
         display: none !important;
     }
 }
+
+/* Додай це в кінець файлу */
+
+.userWrapper {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.welcomeText {
+    color: var(--header-links-footer-text);
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.logoutBtn {
+    background-color: transparent;
+    color: var(--header-logo-burger);
+    border: 1px solid var(--header-register-btn-border);
+}
+
+.logoutBtn:hover {
+    background-color: var(--header-register-btn-bg-hover);
+    color: var(--header-register-btn-text);
+}
+
+/* Коригування для мобільного меню */
+.mobileOnlyButtons {
+    width: 100%;
+}
