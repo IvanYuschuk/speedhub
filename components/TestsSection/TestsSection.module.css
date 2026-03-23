@@ -1,0 +1,150 @@
+/* =========================================
+   БАЗОВІ СТИЛІ СЕКЦІЇ
+   ========================================= */
+.section {
+    padding: 80px 0;
+    background-color: var(--section-bg);
+    transition: background-color 0.3s ease;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.heading {
+    text-align: center;
+    color: var(--section-text-title);
+    font-size: clamp(28px, 4vw, 36px);
+    font-weight: 700;
+    margin-bottom: 48px;
+    letter-spacing: -0.5px;
+    transition: color 0.3s ease;
+}
+
+.highlight {
+    color: var(--section-accent);
+}
+
+/* =========================================
+   СІТКА (АДАПТИВНА)
+   ========================================= */
+.grid {
+    display: grid;
+    gap: 24px;
+    /* За замовчуванням (мобілка): 1 колонка */
+    grid-template-columns: 1fr;
+}
+
+/* Планшет: 2 колонки */
+@media (min-width: 768px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ПК: 3 колонки */
+@media (min-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* =========================================
+   КАРТКА (ПОСИЛАННЯ)
+   ========================================= */
+.card {
+    background: var(--section-card-bg);
+    border: 1px solid var(--section-card-border);
+    border-radius: 20px;
+    padding: 24px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    text-decoration: none;
+    /* Прибираємо підкреслення посилання */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+    height: 100%;
+    /* Щоб всі картки в рядку були однакової висоти */
+}
+
+/* Анімація при наведенні (як у FAQ) */
+.card:hover {
+    transform: translateY(-8px);
+    background: var(--section-card-hover-bg);
+    border-color: var(--section-card-hover-border);
+    box-shadow: var(--section-card-hover-shadow);
+}
+
+/* =========================================
+   ВНУТРІШНІ ЕЛЕМЕНТИ КАРТКИ
+   ========================================= */
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+/* Плашка з номером теми */
+.themeBadge {
+    background: var(--section-icon-bg);
+    color: var(--section-accent);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Стрілочка (анімується при наведенні на картку) */
+.arrowIcon {
+    color: var(--section-text-desc);
+    font-size: 20px;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.card:hover .arrowIcon {
+    color: var(--section-accent);
+    transform: translateX(4px);
+    /* Зсуваємо стрілочку вправо при наведенні */
+}
+
+/* Назва теми */
+.cardTitle {
+    color: var(--section-text-title);
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin: 0 0 24px 0;
+    transition: color 0.3s ease;
+    /* Якщо назва дуже довга, можна обмежити її рядки, але зараз просто розтягує картку */
+}
+
+/* Блок з кількістю тестів */
+.cardFooter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    /* Притискає футер до низу, якщо назва коротка */
+    padding-top: 16px;
+    border-top: 1px solid var(--section-card-border);
+    /* Легкий розділювач */
+    transition: border-color 0.3s ease;
+}
+
+.countLabel {
+    color: var(--section-text-desc);
+    font-size: 14px;
+}
+
+.countValue {
+    color: var(--section-text-title);
+    font-weight: 700;
+    font-size: 15px;
+}

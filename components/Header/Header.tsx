@@ -6,8 +6,19 @@ import css from './Header.module.css';
 import ModalSection from '../ModalSection/ModalSection';
 import RegisterForm from '../RegisterForm/RegisterForm';
 import LoginForm from '../LoginForm/LoginForm';
+import { usePathname } from 'next/navigation';
 
 const Header = () => {
+
+    const pathname = usePathname();
+    const desktopNavLinks = [
+        { name: "Головна", href: "/" },
+        { name: "Лекції", href: "/lectures" },
+        { name: "Тести", href: "/tests" },
+        { name: "Робота над помилками", href: "/mistakes" }
+    ];
+
+
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleMenu = () => setIsOpen(!isOpen);
@@ -55,10 +66,14 @@ const Header = () => {
 
                 <nav className={css.desktopNav}>
                     <ul className={css.desktopNavList}>
-                        <li><Link className={css.navLink} href="/">Головна</Link></li>
-                        <li><Link className={css.navLink} href="/lectures">Лекції</Link></li>
-                        <li><Link className={css.navLink} href="/tests">Тести</Link></li>
-                        <li><Link className={css.navLink} href="/mistakes">Робота над помилками</Link></li>
+                       {desktopNavLinks.map((link) => {
+                           const isActive = link.href === pathname;
+                           return (
+                               <li key={link.name}>
+                                   <Link className={`${css.navLink} ${isActive ? css.active : ""}`} href={link.href}>{ link.name }</Link>
+                               </li>
+                           );
+                       })}
                     </ul>
                 </nav>
 
@@ -71,6 +86,7 @@ const Header = () => {
                         <ul className={css.desktopButtonsList}>
                             <li>
                                     <button type="button" className={`${css.button} ${css.loginButton}`} onClick={() => {
+                                        closeMenu();
                                         loginModal();
                                         openModal();
                                     }
@@ -78,6 +94,7 @@ const Header = () => {
                             </li>
                             <li>
                                     <button type="button" className={`${css.button} ${css.registerButton}`} onClick={() => {
+                                        closeMenu();
                                         registerModal();
                                         openModal();
                                 }}>Зареєструватись</button>
