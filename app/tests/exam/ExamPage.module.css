@@ -33,27 +33,68 @@
     margin-bottom: 32px;
 }
 
-.progressText {
-    display: block;
-    color: var(--section-text-desc);
-    font-size: 14px;
-    font-weight: 600;
+.headerTop {
+    display: flex;
+    justify-content: space-between;
+    /* Розставляє елементи по краях */
+    align-items: center;
     margin-bottom: 12px;
 }
 
-.progressBar {
-    width: 100%;
-    height: 8px;
-    background: var(--section-card-border);
-    border-radius: 999px;
-    overflow: hidden;
+.progressText {
+    color: var(--section-text-desc);
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0;
+    /* Забираємо margin-bottom, бо тепер це робить headerTop */
 }
 
-.progressFill {
-    height: 100%;
-    background: var(--section-accent);
-    border-radius: 999px;
-    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+
+.timer {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--section-bg);
+    border: 1px solid var(--section-card-border);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--section-text-title);
+    transition: all 0.3s ease;
+}
+
+.timerIcon {
+    width: 18px;
+    height: 18px;
+    color: var(--section-accent);
+}
+
+/* Коли залишається менше 1 хвилини (червоний колір пульсує) */
+.timer.timerDanger {
+    border-color: #ef4444;
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+    animation: pulseTimer 1s infinite;
+}
+
+.timer.timerDanger .timerIcon {
+    color: #ef4444;
+}
+
+@keyframes pulseTimer {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
 
 /* =========================================
@@ -325,6 +366,7 @@
         flex-direction: column;
     }
 }
+
 /* =========================================
    ПАНЕЛЬ НАВІГАЦІЇ ПО ПИТАННЯХ (Степпер)
    ========================================= */

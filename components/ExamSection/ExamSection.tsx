@@ -48,7 +48,7 @@ const ExamSection = () => {
                     </ul>
 
                     {/* Кнопка */}
-                    <Link href="/exam" className={css.button}>
+                    <Link href="/tests/exam" className={css.button}>
                         Пройти тестування
                     </Link>
 

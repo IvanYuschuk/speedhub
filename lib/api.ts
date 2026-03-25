@@ -1,7 +1,7 @@
 import { Test } from "@/types/tests"
 import axios from "axios"
 
-const getTestsByTheme = async (id: string) => {
+export const getTestsByTheme = async (id: string) => {
     const res = await axios.get<Test[]>("https://speedhub-6fam.onrender.com/api/questions/search-by-unit", {
         params: {
             id,
@@ -10,4 +10,8 @@ const getTestsByTheme = async (id: string) => {
     return res.data;
 }
 
-export default getTestsByTheme;
+
+export const getExamTest = async () => {
+    const res = await axios.get<Test[]>("https://speedhub-6fam.onrender.com/api/questions/test");
+    return res.data;
+}

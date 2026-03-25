@@ -1,7 +1,7 @@
 // ТУТ НЕМАЄ "use client" - це серверний компонент!
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import TestsSectionClient from './TestSection.Client';
-import getTestsByTheme from '@/lib/api';
+import { getTestsByTheme } from '@/lib/api';
 
 export default async function TestsSection() {
     // Створюємо новий екземпляр QueryClient для цього серверного запиту

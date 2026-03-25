@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
-import getTestsByTheme from '@/lib/api';
+import { getTestsByTheme } from '@/lib/api';
 import css from './TestsSection.module.css'; // Використовуємо спільні стилі
 
 // Експортуємо інтерфейс, щоб його міг використовувати головний компонент

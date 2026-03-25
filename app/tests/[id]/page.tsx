@@ -1,4 +1,4 @@
-import getTestsByTheme from "@/lib/api";
+import { getTestsByTheme } from "@/lib/api";
 import { QueryClient, dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import TestPageClient from "./TestPage.Client";
 
