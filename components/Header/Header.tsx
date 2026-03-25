@@ -1,182 +1,265 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link'; 
-import css from './Header.module.css';
-import ModalSection from '../ModalSection/ModalSection';
-import RegisterForm from '../RegisterForm/RegisterForm';
-import LoginForm from '../LoginForm/LoginForm';
-import { usePathname } from 'next/navigation';
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import css from "./Header.module.css";
+import ModalSection from "../ModalSection/ModalSection";
+import RegisterForm from "../RegisterForm/RegisterForm";
+import LoginForm from "../LoginForm/LoginForm";
+import UserAccount from "../UserAccount/UserAccount";
+import { usePathname } from "next/navigation";
+import { getUserName } from "@/app/utils/auth";
 
 const Header = () => {
+  const pathname = usePathname();
+  const [userName, setUserName] = useState<string | null>(null);
+  const [isUserAccountOpen, setIsUserAccountOpen] = useState(false);
 
-    const pathname = usePathname();
-    const desktopNavLinks = [
-        { name: "Головна", href: "/" },
-        { name: "Лекції", href: "/lectures" },
-        { name: "Тести", href: "/tests" },
-        { name: "Робота над помилками", href: "/mistakes" }
-    ];
+  const desktopNavLinks = [
+    { name: "Головна", href: "/" },
+    { name: "Лекції", href: "/lectures" },
+    { name: "Тести", href: "/tests" },
+    { name: "Робота над помилками", href: "/mistakes" },
+  ];
 
+  // Слідкуємо за станом авторизації
+  useEffect(() => {
+    const updateHeader = () => {
+      setUserName(getUserName());
+    };
+    updateHeader();
+    window.addEventListener("auth-change", updateHeader);
+    return () => window.removeEventListener("auth-change", updateHeader);
+  }, []);
 
-    const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleMenu = () => setIsOpen(!isOpen);
+  const closeMenu = () => setIsOpen(false);
 
-    const toggleMenu = () => setIsOpen(!isOpen);
-    const closeMenu = () => setIsOpen(false);
+  const [isopenModal, setIsOpenModal] = useState(false);
+  const openModal = () => setIsOpenModal(true);
+  const closeModal = () => setIsOpenModal(false);
 
-    const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
-        if (event.target === event.currentTarget) {
-            closeMenu();
-        }
+  const [isRegisterModal, setIsRegisterModal] = useState<boolean | null>(null);
+  const registerModal = () => setIsRegisterModal(true);
+  const loginModal = () => setIsRegisterModal(false);
+
+  // Закриття модалки акаунта при кліку в будь-якому іншому місці
+  useEffect(() => {
+    if (!isUserAccountOpen) return;
+    const handleClickOutside = () => setIsUserAccountOpen(false);
+    window.addEventListener("click", handleClickOutside);
+    return () => window.removeEventListener("click", handleClickOutside);
+  }, [isUserAccountOpen]);
+
+  const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (event.target === event.currentTarget) {
+      closeMenu();
     }
+  };
 
-    useEffect(() => {
-        if (isOpen) {
-            document.body.style.overflow = 'hidden';
-            document.documentElement.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-             document.documentElement.style.overflow = '';
-        }
-        return () => {
-            document.body.style.overflow = '';
-             document.documentElement.style.overflow = '';
-        };
-    }, [isOpen]);
+  useEffect(() => {
+    const overflow = isOpen ? "hidden" : "";
+    document.body.style.overflow = overflow;
+    document.documentElement.style.overflow = overflow;
+  }, [isOpen]);
 
-    const [isopenModal, setIsOpenModal] = useState(false);
+  return (
+    <>
+      <header className={css.header}>
+        <div className={css.container}>
+          <Link href="/" className={css.logo} onClick={closeMenu}>
+            <span className={css.icon}>🚀</span>
+            <span className={css.title}>
+              Speed<span className={css.titleSmall}>hub</span>
+            </span>
+          </Link>
 
-    const openModal = () => setIsOpenModal(true);
-    const closeModal = () => setIsOpenModal(false)
+          <nav className={css.desktopNav}>
+            <ul className={css.desktopNavList}>
+              {desktopNavLinks.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    className={`${css.navLink} ${link.href === pathname ? css.active : ""}`}
+                    href={link.href}
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
-    const [isRegisterModal, setIsRegisterModal] = useState<boolean | null>(null);
+          <div className={css.rightPanel}>
+            <div className={css.desktopButtons}>
+              {userName ? (
+                /* Кнопка акаунта з обгорткою для позиціювання */
+                <div className={css.userMenuContainer}>
+                  <button
+                    type="button"
+                    className={css.userBtn}
+                    onClick={(e) => {
+                      e.stopPropagation(); // Зупиняємо спливання кліку
+                      e.nativeEvent.stopImmediatePropagation();
+                      setIsUserAccountOpen(!isUserAccountOpen);
+                    }}
+                  >
+                    {userName}
+                    <svg
+                      className={`${css.arrow} ${isUserAccountOpen ? css.arrowRotated : ""}`}
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M6 9l6 6 6-6" />
+                    </svg>
+                  </button>
 
-    const registerModal = () => setIsRegisterModal(true);
-    const loginModal = () => setIsRegisterModal(false);
-
-    return (
-        <>
-        <header className={css.header}>
-            <div className={css.container}>
-
-                <Link href="/" className={css.logo} onClick={closeMenu}>
-                    <span className={css.icon}>🚀</span>
-                    <span className={css.title}>Speed<span className={css.titleSmall}>hub</span></span>
-                </Link>
-
-                <nav className={css.desktopNav}>
-                    <ul className={css.desktopNavList}>
-                       {desktopNavLinks.map((link) => {
-                           const isActive = link.href === pathname;
-                           return (
-                               <li key={link.name}>
-                                   <Link className={`${css.navLink} ${isActive ? css.active : ""}`} href={link.href}>{ link.name }</Link>
-                               </li>
-                           );
-                       })}
-                    </ul>
-                </nav>
-
-                {/* =========================================
-                    3. ПРАВА ПАНЕЛЬ (Кнопки + Бургер)
-                    ========================================= */}
-                <div className={css.rightPanel}>
-                    {/* Кнопки в хедері (Видимі на Планшеті та ПК) */}
-                    <div className={css.desktopButtons}>
-                        <ul className={css.desktopButtonsList}>
-                            <li>
-                                    <button type="button" className={`${css.button} ${css.loginButton}`} onClick={() => {
-                                        closeMenu();
-                                        loginModal();
-                                        openModal();
-                                    }
-                                    }>Увійти</button>
-                            </li>
-                            <li>
-                                    <button type="button" className={`${css.button} ${css.registerButton}`} onClick={() => {
-                                        closeMenu();
-                                        registerModal();
-                                        openModal();
-                                }}>Зареєструватись</button>
-                            </li>
-                        </ul>
+                  {isUserAccountOpen && (
+                    /* Зупиняємо клік всередині модалки, щоб вона не закривалася сама */
+                    <div onClick={(e) => e.stopPropagation()}>
+                      <UserAccount
+                        onClose={() => setIsUserAccountOpen(false)}
+                      />
                     </div>
-
-                    <button type="button" className={css.burgerBtn} onClick={toggleMenu} aria-label="Меню">
-                        {isOpen ? (
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <line x1="18" y1="6" x2="6" y2="18"></line>
-                                <line x1="6" y1="6" x2="18" y2="18"></line>
-                            </svg>
-                        ) : (
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <line x1="3" y1="12" x2="21" y2="12"></line>
-                                <line x1="3" y1="6" x2="21" y2="6"></line>
-                                <line x1="3" y1="18" x2="21" y2="18"></line>
-                            </svg>
-                        )}
-                    </button>
+                  )}
                 </div>
+              ) : (
+                <ul className={css.desktopButtonsList}>
+                  <li>
+                    <button
+                      type="button"
+                      className={`${css.button} ${css.loginButton}`}
+                      onClick={() => {
+                        closeMenu();
+                        loginModal();
+                        openModal();
+                      }}
+                    >
+                      Увійти
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      className={`${css.button} ${css.registerButton}`}
+                      onClick={() => {
+                        closeMenu();
+                        registerModal();
+                        openModal();
+                      }}
+                    >
+                      Зареєструватись
+                    </button>
+                  </li>
+                </ul>
+              )}
             </div>
 
-            {isOpen && (
-                <>
-                    <div className={css.backdrop} onClick={handleBackdropClick}></div>
-                    
-                    <div className={css.drawer}>
-                        <div className={css.drawerContent}>
-                            
-                            <nav>
-                                <ul className={css.mobileNavList}>
-                                    <li><Link className={css.navLink} href="/" onClick={closeMenu}>Головна</Link></li>
-                                    <li><Link className={css.navLink} href="/lectures" onClick={closeMenu}>Лекції</Link></li>
-                                    <li><Link className={css.navLink} href="/tests" onClick={closeMenu}>Тести</Link></li>
-                                    <li><Link className={css.navLink} href="/mistakes" onClick={closeMenu}>Робота над помилками</Link></li>
-                                </ul>
-                            </nav>
+            <button
+              type="button"
+              className={css.burgerBtn}
+              onClick={toggleMenu}
+            >
+              {isOpen ? "✕" : "☰"}
+            </button>
+          </div>
+        </div>
 
-                            {/* Кнопки авторизації (Показуються ТІЛЬКИ на мобілці, на всю ширину) */}
-                            <div className={css.mobileOnlyButtons}>
-                                <ul className={css.mobileButtonsList}>
-                                    <li>
-                                            <button type="button" className={`${css.button} ${css.loginButton} ${css.fullWidthBtn}`} onClick={() => {
-                                                closeMenu();
-                                                loginModal();
-                                                openModal();
-                                        }}>
-                                            Увійти
-                                        </button>
-                                    </li>
-                                    <li>
-                                            <button type="button" className={`${css.button} ${css.registerButton} ${css.fullWidthBtn}`} onClick={() => {
-                                                closeMenu();
-                                                registerModal();
-                                                openModal();
-                                        }}>
-                                            Зареєструватись
-                                        </button>
-                                    </li>
-                                </ul>
-                            </div>
-                            
-                        </div>
-                    </div>
-                </>
-            )}
-            </header>
-            {isopenModal && <ModalSection onClose={closeModal}>
-                {isRegisterModal ? <RegisterForm onClose={closeModal} onOpen={() => {
-                    closeModal();
-                    loginModal();
-                    openModal();
-                }}/> : <LoginForm onClose={closeModal} onOpen={() => {
-                    closeModal();
-                    registerModal();
-                    openModal();
-                }}/>}
-            </ModalSection>}
-        </>
-    );
+        {/* Мобільне меню */}
+        {isOpen && (
+          <div className={css.drawer}>
+            <div className={css.drawerContent}>
+              <nav>
+                <ul className={css.mobileNavList}>
+                  {desktopNavLinks.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        className={css.navLink}
+                        href={link.href}
+                        onClick={closeMenu}
+                      >
+                        {link.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+              <div className={css.mobileOnlyButtons}>
+                {userName ? (
+                  <button
+                    className={`${css.button} ${css.loginButton} ${css.fullWidthBtn}`}
+                    onClick={() => {
+                      setIsUserAccountOpen(true);
+                      closeMenu();
+                    }}
+                  >
+                    Мій кабінет ({userName})
+                  </button>
+                ) : (
+                  <ul className={css.mobileButtonsList}>
+                    <li>
+                      <button
+                        className={`${css.button} ${css.loginButton} ${css.fullWidthBtn}`}
+                        onClick={() => {
+                          closeMenu();
+                          loginModal();
+                          openModal();
+                        }}
+                      >
+                        Увійти
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className={`${css.button} ${css.registerButton} ${css.fullWidthBtn}`}
+                        onClick={() => {
+                          closeMenu();
+                          registerModal();
+                          openModal();
+                        }}
+                      >
+                        Зареєструватись
+                      </button>
+                    </li>
+                  </ul>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </header>
+
+      {isopenModal && (
+        <ModalSection onClose={closeModal}>
+          {isRegisterModal ? (
+            <RegisterForm
+              onClose={closeModal}
+              onOpen={() => {
+                closeModal();
+                loginModal();
+                openModal();
+              }}
+            />
+          ) : (
+            <LoginForm
+              onClose={closeModal}
+              onOpen={() => {
+                closeModal();
+                registerModal();
+                openModal();
+              }}
+            />
+          )}
+        </ModalSection>
+      )}
+    </>
+  );
 };
 
 export default Header;
