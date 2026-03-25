@@ -19,7 +19,7 @@ const HeroSection = () => {
                     {/* Права колонка: Зображення / Ілюстрація */}
                     <div className={css.heroImageWrapper}>
                         <div className={css.heroImageContainer}>
-                            <Image src="/images/HeroSection.jpeg" alt="Успішне навчання та успіх" className={css.heroImage} width={640} height={360}/>
+                            <Image src="/images/HeroSection.jpeg" alt="Успішне навчання та успіх" className={css.heroImage} width={640} height={360} loading='eager'/>
                             {/* Додамо візуальний елемент успіху (наприклад, іконку) */}
                             <div className={css.heroBadgeContainer}>
                                 <div className={css.heroBadge}>
