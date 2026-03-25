@@ -1,281 +1,310 @@
 .header {
-    background: var(--header-footer-bg);
-    padding: 16px 0;
-    box-shadow: 0 4px 20px var(--header-footer-shadow);
-    position: sticky;
-    top: 0;
-    z-index: 100;
+  background: var(--header-footer-bg);
+  padding: 16px 0;
+  box-shadow: 0 4px 20px var(--header-footer-shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  text-decoration: none;
 }
 
 .title {
-    color: var(--header-logo-burger);
-    font-size: 24px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
+  color: var(--header-logo-burger);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
 .titleSmall {
-    color: var(--header-footer-hub);
+  color: var(--header-footer-hub);
 }
 
 .desktopNav,
 .desktopButtons {
-    display: none;
+  display: none;
 }
 
 .rightPanel {
-    display: flex;
-    align-items: center;
-    gap: 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
 }
 
 .burgerBtn {
-    background: none;
-    border: none;
-    color: var(--header-logo-burger);
-    cursor: pointer;
-    padding: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 101;
+  background: none;
+  border: none;
+  color: var(--header-logo-burger);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 101;
 }
 
 .backdrop {
-    position: fixed;
-    top: 68px;
-    left: 0;
-    width: 100%;
-    height: calc(100vh - 68px);
-    background: var(--header-backdrop);
-    backdrop-filter: blur(8px);
-    z-index: 98;
+  position: fixed;
+  top: 68px;
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 68px);
+  background: var(--header-backdrop);
+  backdrop-filter: blur(8px);
+  z-index: 98;
 }
 
 .drawer {
-    position: fixed;
-    top: 68px;
-    left: 0;
-    width: 100%;
-    height: calc(100vh - 68px);
-    background: var(--header-drawer);
-    z-index: 99;
-    padding: 32px 24px;
-    overflow-y: auto;
-    animation: slideDown 0.3s ease-out forwards;
+  position: fixed;
+  top: 68px;
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 68px);
+  background: var(--header-drawer);
+  z-index: 99;
+  padding: 32px 24px;
+  overflow-y: auto;
+  animation: slideDown 0.3s ease-out forwards;
 }
 
 .drawerContent {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
 }
 
 .mobileNavList {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-    align-items: center;
-    padding: 0;
-    margin: 24px 0 0 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  align-items: center;
+  padding: 0;
+  margin: 24px 0 0 0;
 }
 
 .mobileButtonsList {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    width: 100%;
-    padding: 0;
-    margin: 40px 0 24px 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  padding: 0;
+  margin: 40px 0 24px 0;
 }
 
 .navLink {
-    color: var(--header-links-footer-text);
-    text-decoration: none;
-    font-size: 20px;
-    font-weight: 500;
-    transition: color 0.3s ease;
+  color: var(--header-links-footer-text);
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: 500;
+  transition: color 0.3s ease;
 }
 
 .navLink:hover,
 .navLink:active {
-    color: var(--header-links-hover);
+  color: var(--header-links-hover);
 }
 
 .navLink.active {
-    color: var(--header-links-hover);
+  color: var(--header-links-hover);
 }
 
 .button {
-    display: inline-block;
-    padding: 10px 24px;
-    border-radius: 999px;
-    font-size: 15px;
-    font-weight: 600;
-    font-family: inherit;
-    cursor: pointer;
-    border: none;
-    outline: none;
-    transition: all 0.3s ease;
+  display: inline-block;
+  padding: 10px 24px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: all 0.3s ease;
 }
 
 .fullWidthBtn {
-    width: 100%;
-    text-align: center;
-    padding: 14px 24px;
-    font-size: 16px;
+  width: 100%;
+  text-align: center;
+  padding: 14px 24px;
+  font-size: 16px;
 }
 
 .loginButton {
-    background-color: var(--header-login-btn-bg);
-    color: var(--header-login-btn-text);
+  background-color: var(--header-login-btn-bg);
+  color: var(--header-login-btn-text);
 }
 
 .loginButton:hover {
-    background-color: var(--header-login-btn-bg-hover);
-    transform: translateY(-2px);
+  background-color: var(--header-login-btn-bg-hover);
+  transform: translateY(-2px);
 }
 
 .registerButton {
-    background: var(--header-register-btn-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    color: var(--header-register-btn-text);
-    border: 1px solid var(--header-register-btn-border);
+  background: var(--header-register-btn-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--header-register-btn-text);
+  border: 1px solid var(--header-register-btn-border);
 }
 
 .registerButton:hover {
-    background: var(--header-register-btn-bg-hover);
-    transform: translateY(-2px);
+  background: var(--header-register-btn-bg-hover);
+  transform: translateY(-2px);
 }
 
 @keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (min-width: 768px) {
+  .desktopButtons {
+    display: block;
+  }
 
-    .desktopButtons {
-        display: block;
-    }
+  .desktopButtonsList {
+    display: flex;
+    gap: 16px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
 
-    .desktopButtonsList {
-        display: flex;
-        gap: 16px;
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
+  .mobileOnlyButtons {
+    display: none;
+  }
 
-    .mobileOnlyButtons {
-        display: none;
-    }
+  .drawer {
+    left: auto;
+    right: 0;
+    width: 320px;
+    box-shadow: -4px 0 24px var(--header-footer-shadow);
+    animation: slideInRight 0.3s ease-out forwards;
+  }
 
-    .drawer {
-        left: auto;
-        right: 0;
-        width: 320px;
-        box-shadow: -4px 0 24px var(--header-footer-shadow);
-        animation: slideInRight 0.3s ease-out forwards;
-    }
-
-    .backdrop {
-        background: rgba(0, 0, 0, 0.5);
-    }
+  .backdrop {
+    background: rgba(0, 0, 0, 0.5);
+  }
 }
 
 @keyframes slideInRight {
-    from {
-        transform: translateX(100%);
-    }
+  from {
+    transform: translateX(100%);
+  }
 
-    to {
-        transform: translateX(0);
-    }
+  to {
+    transform: translateX(0);
+  }
 }
 
 @media (min-width: 1024px) {
+  .desktopNav {
+    display: block;
+  }
 
-    .desktopNav {
-        display: block;
-    }
+  .desktopNavList {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
 
-    .desktopNavList {
-        display: flex;
-        gap: 32px;
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
+  .desktopNavList .navLink {
+    font-size: 15px;
+  }
 
-    .desktopNavList .navLink {
-        font-size: 15px;
-    }
+  .burgerBtn {
+    display: none;
+  }
 
-    .burgerBtn {
-        display: none;
-    }
-
-    .backdrop,
-    .drawer {
-        display: none !important;
-    }
+  .backdrop,
+  .drawer {
+    display: none !important;
+  }
 }
 
 /* Додай це в кінець файлу */
 
 .userWrapper {
-    display: flex;
-    align-items: center;
-    gap: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .welcomeText {
-    color: var(--header-links-footer-text);
-    font-size: 15px;
-    font-weight: 500;
+  color: var(--header-links-footer-text);
+  font-size: 15px;
+  font-weight: 500;
 }
 
 .logoutBtn {
-    background-color: transparent;
-    color: var(--header-logo-burger);
-    border: 1px solid var(--header-register-btn-border);
+  background-color: transparent;
+  color: var(--header-logo-burger);
+  border: 1px solid var(--header-register-btn-border);
 }
 
 .logoutBtn:hover {
-    background-color: var(--header-register-btn-bg-hover);
-    color: var(--header-register-btn-text);
+  background-color: var(--header-register-btn-bg-hover);
+  color: var(--header-register-btn-text);
 }
 
 /* Коригування для мобільного меню */
 .mobileOnlyButtons {
-    width: 100%;
+  width: 100%;
+}
+
+/* Додай або онови ці класи в кінці Header.module.css */
+
+.userMenuContainer {
+  position: relative; /* ЦЕ ОБОВ'ЯЗКОВО */
+  display: flex;
+  align-items: center;
+}
+
+.userBtn {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--header-logo-burger);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 18px;
+  font-family: inherit;
+  padding: 4px 0;
+}
+
+.arrow {
+  transition: transform 0.3s ease;
+  pointer-events: none; /* Щоб клік по стрілці не заважав кнопці */
+}
+
+.arrowRotated {
+  transform: rotate(180deg);
 }
