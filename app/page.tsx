@@ -1,7 +1,7 @@
-import FaqSection from "@/components/FaqSection/FaqSection";
-import LectureSection from "@/components/LectureSection/LectureSection";
-import HeroSection from "@/components/HeroSection/HeroSection";
-import PaymentSection from "@/components/PaymentSection/PaymentSection";
+import FaqSection from "@/components/HomePage/FaqSection/FaqSection";
+import LectureSection from "@/components/HomePage/LectureSection/LectureSection";
+import HeroSection from "@/components/HomePage/HeroSection/HeroSection";
+import PaymentSection from "@/components/HomePage/PaymentSection/PaymentSection";
 
 const Main = () => {
   return (

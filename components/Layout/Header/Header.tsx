@@ -3,10 +3,10 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import css from "./Header.module.css";
-import ModalSection from "../ModalSection/ModalSection";
-import RegisterForm from "../RegisterForm/RegisterForm";
-import LoginForm from "../LoginForm/LoginForm";
-import UserAccount from "../UserAccount/UserAccount";
+import ModalSection from "../../Modals/ModalSection/ModalSection";
+import RegisterForm from "../../Modals/RegisterForm/RegisterForm";
+import LoginForm from "../../Modals/LoginForm/LoginForm";
+import UserAccount from "../../Modals/UserAccount/UserAccount";
 import { usePathname } from "next/navigation";
 import { getUserName } from "@/app/utils/auth";
 
@@ -52,6 +52,7 @@ const Header = () => {
     return () => window.removeEventListener("click", handleClickOutside);
   }, [isUserAccountOpen]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
       closeMenu();
