@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import css from './LectureSection.module.css';
-import AnimationCar from '../AnimationCar/AnimationCar';
+import AnimationCar from '../../AnimationCar/AnimationCar';
 
 interface StepItem {
     id: number;
