@@ -1,0 +1,40 @@
+.imageBlock {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 32px 0;
+    /* Відступ знизу перед варіантами відповідей */
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    /* Відстань, якщо картинок декілька */
+}
+
+.imageItem {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background: var(--section-bg);
+    /* Легке тло під картинкою */
+    border-radius: 16px;
+    border: 1px solid var(--section-card-border);
+    padding: 12px;
+    overflow: hidden;
+}
+
+.questionImage {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    /* Обмежуємо висоту, щоб картинка не займала весь екран */
+    object-fit: contain;
+    /* Зберігаємо правильні пропорції зображення */
+    border-radius: 8px;
+}
+
+.questionTitle {
+    color: var(--section-text-title);
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 32px;
+}

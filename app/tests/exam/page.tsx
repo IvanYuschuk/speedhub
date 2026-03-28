@@ -6,7 +6,7 @@ const examPage = async () => {
     const queryClient = new QueryClient();
 
     await queryClient.prefetchQuery({
-        queryKey: ["tests"],
+        queryKey: ["examTest"],
         queryFn: () => getExamTest(),
     })
     

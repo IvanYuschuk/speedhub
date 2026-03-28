@@ -51,51 +51,6 @@
 
 
 
-.timer {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--section-bg);
-    border: 1px solid var(--section-card-border);
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-weight: 700;
-    font-size: 15px;
-    color: var(--section-text-title);
-    transition: all 0.3s ease;
-}
-
-.timerIcon {
-    width: 18px;
-    height: 18px;
-    color: var(--section-accent);
-}
-
-/* Коли залишається менше 1 хвилини (червоний колір пульсує) */
-.timer.timerDanger {
-    border-color: #ef4444;
-    color: #ef4444;
-    background: rgba(239, 68, 68, 0.1);
-    animation: pulseTimer 1s infinite;
-}
-
-.timer.timerDanger .timerIcon {
-    color: #ef4444;
-}
-
-@keyframes pulseTimer {
-    0% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.7;
-    }
-
-    100% {
-        opacity: 1;
-    }
-}
 
 /* =========================================
    ПИТАННЯ ТА ВАРІАНТИ
