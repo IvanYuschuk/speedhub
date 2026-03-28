@@ -12,7 +12,7 @@ const TestPage = async ({ params }: Props) => {
     const queryClient = new QueryClient();
 
     await queryClient.prefetchQuery({
-        queryKey: ["test", id],
+        queryKey: ["testByTheme", id],
         queryFn: () => getTestsByTheme(id),
     });
 

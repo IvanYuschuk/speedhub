@@ -1,0 +1,83 @@
+.resultCard {
+    background: var(--section-card-bg);
+    border: 1px solid var(--section-card-border);
+    border-radius: 24px;
+    padding: 60px 40px;
+    text-align: center;
+}
+
+.heading {
+    color: var(--section-text-title);
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.highlight {
+    color: var(--section-accent);
+}
+
+.resultText {
+    color: var(--section-text-desc);
+    font-size: 18px;
+    margin-bottom: 40px;
+}
+
+.resultActions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+.buttonOutline {
+    padding: 14px 32px;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid var(--section-card-border);
+    color: var(--section-text-title);
+    transition: all 0.3s ease;
+}
+
+.buttonOutline:hover {
+    border-color: var(--section-text-title);
+    background: var(--section-card-border);
+}
+
+.button {
+    display: inline-block;
+    padding: 14px 32px;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    background-color: var(--section-btn-bg);
+    color: var(--section-btn-text);
+    box-shadow: var(--section-btn-shadow);
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.button:hover:not(:disabled) {
+    background-color: var(--section-btn-hover-bg);
+    color: var(--section-btn-hover-text);
+    transform: translateY(-2px);
+    box-shadow: var(--section-btn-hover-shadow);
+}
+
+.button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+@media (max-width: 600px) {
+    .resultActions {
+        flex-direction: column;
+    }
+}

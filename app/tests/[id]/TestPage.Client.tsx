@@ -1,157 +1,82 @@
 'use client';
 
-import React, { useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect} from 'react';
 import css from './TestPage.module.css';
-import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import { getTestsByTheme } from '@/lib/api';
-import Image from 'next/image';
+import TestResults from '@/components/TestPage/TestResults/TestResults';
+import QuestionStepper from '@/components/TestPage/QuestionStepper/QuestionStepper';
+import TestProgress from '@/components/TestPage/TestProgress/TestProgress';
+import QuestionContent from '@/components/TestPage/QuestionContent/QuestionContent';
+import { Test } from '@/types/tests';
+import QuestionOptions from '@/components/TestPage/QuestionOptions/QuestionOptions';
+import TestControls from '@/components/TestPage/TestControls/TestControls';
 
+const fallbackQuestion: Test = {
+    _id: "q1", id: "r1q4", image: [],
+    question: "Чи належить до проїзної частини велосипедна смуга?",
+    options: [
+        { _id: "o1", id: 1, text: "Так, належить." },
+        { _id: "o2", id: 2, text: "Ні, не належить." }
+    ],
+    correct_option_id: 1,
+    explanation: "Велосипедна смуга виконується в межах проїзної частини, тому вона до неї належить."
+};
 
 const TestPageClient = () => {
-    // Стан для поточного індексу питання
+    const { id } = useParams<{ id: string }>()
+    
     const [currentIndex, setCurrentIndex] = useState(0);
-    
-    // Стан для збереження вибраних відповідей (ключ - id питання, значення - id відповіді)
     const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number>>({});
-    
-    
-    // Стан завершення тесту
     const [isFinished, setIsFinished] = useState(false);
-    
     const [checkedAnswers, setCheckedAnswers] = useState<Record<string, boolean>>({});
-
-    const stepperRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         window.scrollTo({
-            top: 0, // Скролимо на самий верх
-            behavior: 'smooth' // 'smooth' для плавного скролу, 'auto' для миттєвого
+            top: 0, 
+            behavior: 'smooth' 
         });
-
-        if (stepperRef.current) {
-            const container = stepperRef.current;
-            const activeStep = container.children[currentIndex] as HTMLElement;
-
-            if (activeStep) {
-                const containerScrollLeft = container.scrollLeft; // Наскільки вже проскролено
-                const containerWidth = container.clientWidth; // Ширина видимої частини
-
-                // Координати поточної кнопки
-                const stepLeft = activeStep.offsetLeft;
-                const stepRight = stepLeft + activeStep.offsetWidth;
-
-                // Якщо кнопка виходить за ПРАВИЙ край екрана
-                if (stepRight > containerScrollLeft + containerWidth) {
-                    container.scrollTo({
-                        // Скролимо так, щоб кнопка влізла + даємо 24px відступу, щоб було видно краєчок наступної
-                        left: stepRight - containerWidth + 24, 
-                        behavior: 'smooth'
-                    });
-                } 
-                // Якщо кнопка сховалася за ЛІВИМ краєм екрана
-                else if (stepLeft < containerScrollLeft) {
-                    container.scrollTo({
-                        // Скролимо назад вліво + 24px відступу
-                        left: stepLeft - 24, 
-                        behavior: 'smooth'
-                    });
-                }
-            }
-        }
     }, [currentIndex]);
-
-    const {id} = useParams<{id: string}>()
     
-    const { data: mockQuestions } = useQuery({
-        queryKey: ["test", id],
+    const { data: tests } = useQuery({
+        queryKey: ["testByTheme", id],
         queryFn: () => getTestsByTheme(id),
         refetchOnMount: false,
     });
     
-   
-    const currentQuestion = mockQuestions ? mockQuestions[currentIndex] : {
-        _id: "q1",
-        id: "r1q4",
-        image: [],
-        question: "Чи належить до проїзної частини велосипедна смуга?",
-        options: [
-            { _id: "o1", id: 1, text: "Так, належить." },
-            { _id: "o2", id: 2, text: "Ні, не належить." }
-        ],
-        correct_option_id: 1,
-        explanation: "Велосипедна смуга виконується в межах проїзної частини, тому вона до неї належить."
-    }; 
-    const totalQuestions = mockQuestions?.length || 0;
-    
+    const currentQuestion = tests ? tests[currentIndex] : fallbackQuestion;
+    const totalQuestions = tests?.length || 0;
     const isCurrentChecked = checkedAnswers[currentQuestion.id];
 
-    // Обробник вибору варіанта
     const handleOptionSelect = (optionId: number) => {
-        if (isCurrentChecked) return; // Якщо вже натиснули "Відповісти", змінювати не можна
-
-        setSelectedAnswers(prev => ({
-            ...prev,
-            [currentQuestion.id]: optionId
-        }));
+        if (isCurrentChecked) return;
+        setSelectedAnswers(prev => ({ ...prev, [currentQuestion.id]: optionId }));
+    };
+    const handleCheckAnswer = () => setCheckedAnswers(prev => ({ ...prev, [currentQuestion.id]: true }));
+    const handleNext = () => currentIndex < totalQuestions - 1 && setCurrentIndex(prev => prev + 1);
+    const handlePrev = () => currentIndex > 0 &&  setCurrentIndex(prev => prev - 1);
+    const handleFinish = () => setIsFinished(true);
+    const handleRetry = () => {
+        setIsFinished(false);
+        setCurrentIndex(0);
+        setSelectedAnswers({});
+        setCheckedAnswers({});
     };
 
-    const handleCheckAnswer = () => {
-        setCheckedAnswers(prev => ({
-            ...prev,
-            [currentQuestion.id]: true
-        }));
-    };
-
-    // Наступне питання
-    const handleNext = () => {
-        if (currentIndex < totalQuestions - 1) {
-            setCurrentIndex(prev => prev + 1);
-        }
-    };
-
-    // Попереднє питання
-    const handlePrev = () => {
-        if (currentIndex > 0) {
-            setCurrentIndex(prev => prev - 1);
-        }
-    };
-
-    // Завершити тест
-    const handleFinish = () => {
-        setIsFinished(true);
-    };
-
-    // Якщо тест завершено — показуємо екран результатів
     if (isFinished) {
-        // Рахуємо правильні відповіді
-        const correctAnswersCount = mockQuestions?.reduce((acc, question) => {
+        const correctAnswersCount = tests?.reduce((acc, question) => {
             return selectedAnswers[question.id] === question.correct_option_id ? acc + 1 : acc;
         }, 0);
 
         return (
             <section className={css.section}>
                 <div className={css.container}>
-                    <div className={css.resultCard}>
-                        <h2 className={css.heading}>Тест <span className={css.highlight}>завершено!</span></h2>
-                        <p className={css.resultText}>
-                            Твій результат: <strong>{correctAnswersCount} з {totalQuestions}</strong> правильних відповідей.
-                        </p>
-                        <div className={css.resultActions}>
-                            <button className={css.buttonOutline} onClick={() => {
-                                setIsFinished(false);
-                                setCurrentIndex(0);
-                                setSelectedAnswers({});
-                                setCheckedAnswers({});
-                            }}>
-                                Пройти ще раз
-                            </button>
-                            <Link href="/tests" className={css.button}>
-                                Повернутись до тем
-                            </Link>
-                        </div>
-                    </div>
+                    <TestResults
+                        correctAnswersCount={correctAnswersCount}
+                        totalQuestions={totalQuestions}
+                        onRetry={handleRetry}
+                    />
                 </div>
             </section>
         );
@@ -161,146 +86,36 @@ const TestPageClient = () => {
         <section className={css.section}>
             <div className={css.container}>
                 <div className={css.testWrapper}>
-                    {/* НАВІГАЦІЯ ПО ПИТАННЯХ (Верхня панель) */}
-                    <div className={css.questionStepper} ref={stepperRef}>
-                        {mockQuestions?.map((q, index) => {
-                            // Перевіряємо статуси для кожної кнопки
-                            const isChecked = checkedAnswers[q.id];
-                            const isCorrect = isChecked && selectedAnswers[q.id] === q.correct_option_id;
-                            const isIncorrect = isChecked && selectedAnswers[q.id] !== q.correct_option_id;
-                            const isActive = index === currentIndex;
-
-                            // Призначаємо правильний CSS-клас
-                            let statusClass = '';
-                            if (isCorrect) {
-                                statusClass = css.stepCorrect;
-                            } else if (isIncorrect) {
-                                statusClass = css.stepIncorrect;
-                            } else if (isActive) {
-                                statusClass = css.stepActive;
-                            }
-
-                            return (
-                                <button
-                                    key={q.id}
-                                    type="button"
-                                    className={`${css.stepBtn} ${statusClass}`}
-                                    onClick={() => setCurrentIndex(index)}
-                                    aria-label={`Перейти до питання ${index + 1}`}
-                                >
-                                    {index + 1}
-                                </button>
-                            );
-                        })}
-                    </div>
-                    
-                    {/* Хедер тесту (Прогрес) */}
-                    <div className={css.testHeader}>
-                        <span className={css.progressText}>
-                            Питання {currentIndex + 1} з {totalQuestions}
-                        </span>
-                        {/* Прогрес-бар */}
-                        <div className={css.progressBar}>
-                            <div 
-                                className={css.progressFill} 
-                                style={{ width: `${((currentIndex + 1) / totalQuestions) * 100}%` }}
-                            ></div>
-                        </div>
-                    </div>
-
-                    {/* Текст питання */}
-
-                    {currentQuestion.image && currentQuestion.image.length > 0 && (
-                        <ul className={css.imageBlock}>
-                            {currentQuestion.image.map((link, index) => (
-                                <li key={index} className={css.imageItem}>
-                                    <Image 
-                                        src={link} 
-                                        alt={`Ілюстрація до питання ${currentIndex + 1}`} 
-                                        width={800} 
-                                        height={450} 
-                                        className={css.questionImage}
-                                    />
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-
-                    <h2 className={css.questionTitle}>{currentQuestion.question}</h2>
-                    
-
-                   {/* Варіанти відповідей */}
-                    <div className={css.optionsList}>
-                        {currentQuestion.options.map(option => {
-                            const isSelected = selectedAnswers[currentQuestion.id] === option.id;
-                            const isCorrect = option.id === currentQuestion.correct_option_id;
-                            
-                            // Визначаємо класи залежно від статусу перевірки
-                            let optionStatusClass = '';
-                            if (isCurrentChecked) {
-                                if (isCorrect) {
-                                    optionStatusClass = css.correct; // Завжди підсвічуємо правильну зеленим
-                                } else if (isSelected && !isCorrect) {
-                                    optionStatusClass = css.incorrect; // Якщо вибрали неправильну — червоним
-                                } else {
-                                    optionStatusClass = css.disabled; // Інші робимо напівпрозорими
-                                }
-                            } else if (isSelected) {
-                                optionStatusClass = css.selected; // Звичайна підсвітка (синя) до перевірки
-                            }
-
-                            return (
-                                <button
-                                    key={option._id}
-                                    type="button"
-                                    className={`${css.optionBtn} ${optionStatusClass}`}
-                                    onClick={() => handleOptionSelect(option.id)}
-                                >
-                                    <span className={css.optionLetter}>
-                                        {String.fromCharCode(1040 + currentQuestion.options.indexOf(option))}
-                                    </span>
-                                    <span className={css.optionText}>{option.text}</span>
-                                </button>
-                            );
-                        })}
-                    </div>
-
-                    {/* Навігація */}
-                    <div className={css.navigation}>
-                        <button 
-                            className={css.navBtn} 
-                            onClick={handlePrev} 
-                            disabled={currentIndex === 0}
-                        >
-                            ← Назад
-                        </button>
-
-                        {/* ЛОГІКА КНОПОК ЗМІНИЛАСЯ */}
-                        {!isCurrentChecked ? (
-                            <button 
-                                className={css.button} 
-                                onClick={handleCheckAnswer}
-                                disabled={!selectedAnswers[currentQuestion.id]}
-                            >
-                                Відповісти
-                            </button>
-                        ) : currentIndex === totalQuestions - 1 ? (
-                            <button 
-                                className={css.button} 
-                                onClick={handleFinish}
-                            >
-                                Завершити тест
-                            </button>
-                        ) : (
-                            <button 
-                                className={css.button} 
-                                onClick={handleNext}
-                            >
-                                Наступне →
-                            </button>
-                        )}
-                    </div>
-
+                    <QuestionStepper
+                        questions={tests || []}
+                        currentIndex={currentIndex}
+                        checkedAnswers={checkedAnswers}
+                        selectedAnswers={selectedAnswers}
+                        onStepClick={setCurrentIndex}
+                    />
+                    <TestProgress
+                        currentIndex={currentIndex}
+                        totalQuestions={totalQuestions}
+                    />
+                    <QuestionContent
+                        question={currentQuestion}
+                    />
+                    <QuestionOptions
+                        question={currentQuestion}
+                        selectedAnswerId={selectedAnswers[currentQuestion.id]}
+                        isCurrentChecked={isCurrentChecked}
+                        onOptionSelect={handleOptionSelect}
+                    />
+                    <TestControls
+                        currentIndex={currentIndex}
+                        totalQuestions={totalQuestions}
+                        isCurrentChecked={isCurrentChecked}
+                        hasSelectedAnswer={!!selectedAnswers[currentQuestion.id]}
+                        onPrev={handlePrev}
+                        onNext={handleNext}
+                        onCheck={handleCheckAnswer}
+                        onFinish={handleFinish}
+                    />
                 </div>
             </div>
         </section>

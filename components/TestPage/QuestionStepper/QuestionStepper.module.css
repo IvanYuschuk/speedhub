@@ -1,0 +1,89 @@
+.questionStepper {
+    position: relative;
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    /* Місце для скролбару */
+    overflow-x: auto;
+    /* Горизонтальний скрол для мобілок */
+    scrollbar-width: thin;
+    /* Робить скролбар тоншим у Firefox */
+}
+
+/* Стилізація скролбару для Chrome/Safari/Edge */
+.questionStepper::-webkit-scrollbar {
+    height: 4px;
+    /* Тонка лінія скролу */
+}
+
+.questionStepper::-webkit-scrollbar-track {
+    background: var(--section-card-border);
+    border-radius: 4px;
+}
+
+.questionStepper::-webkit-scrollbar-thumb {
+    background: var(--section-text-desc);
+    border-radius: 4px;
+}
+
+/* Базовий вигляд кнопки питання */
+.stepBtn {
+    flex-shrink: 0;
+    /* Забороняємо кнопкам стискатися, щоб вони не сплющились на мобілці */
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    border: 2px solid var(--section-card-border);
+    background: var(--section-bg);
+    color: var(--section-text-title);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.stepBtn:hover {
+    border-color: var(--section-accent);
+}
+
+/* Стан: АКТИВНЕ (поточне) питання */
+.stepBtn.stepActive {
+    border-color: var(--section-accent);
+    background: var(--section-icon-bg);
+    color: var(--section-accent);
+}
+
+/* Стан: ПРАВИЛЬНО відповіли */
+.stepBtn.stepCorrect {
+    border-color: #22c55e;
+    background: #22c55e;
+    color: #ffffff;
+}
+
+/* Стан: НЕПРАВИЛЬНО відповіли */
+.stepBtn.stepIncorrect {
+    border-color: #ef4444;
+    background: #ef4444;
+    color: #ffffff;
+}
+
+/* =========================================
+   АДАПТИВНІСТЬ ДЛЯ МОБІЛОК ТА ПЛАНШЕТІВ
+   ========================================= */
+@media (max-width: 768px) {
+    .stepBtn {
+        width: 38px;
+        height: 38px;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+
+    /* Ховаємо скролбар на мобілках для більшої естетики (можна свайпати без візуальної смуги) */
+    .questionStepper::-webkit-scrollbar {
+        display: none;
+    }
+}

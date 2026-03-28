@@ -2,13 +2,14 @@
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import TestsSectionClient from './TestSection.Client';
 import { getTestsByTheme } from '@/lib/api';
+import { themeIds } from '@/types/tests';
 
 export default async function TestsSection() {
     // Створюємо новий екземпляр QueryClient для цього серверного запиту
     const queryClient = new QueryClient();
 
     // Масив наших ID тем, для яких треба отримати дані
-    const themeIds = ["r1", "r2", "r3", "r4", "r5", "r6"];
+   
 
     // Робимо всі запити паралельно на сервері та кладемо їх у кеш
     await Promise.all(

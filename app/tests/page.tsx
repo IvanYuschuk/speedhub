@@ -1,7 +1,7 @@
 import ExamSection from "@/components/TestsPage/ExamSection/ExamSection";
 import TestsSection from "@/components/TestsPage/TestsSection/TestsSection";
 
-const Tests = () => {
+const TestsPage = () => {
     return (
         <>
             <TestsSection />
@@ -10,4 +10,4 @@ const Tests = () => {
     )
 }
 
-export default Tests;
+export default TestsPage;
