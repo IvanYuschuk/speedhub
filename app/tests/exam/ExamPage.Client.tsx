@@ -4,13 +4,15 @@ import React, { useState, useEffect} from 'react';
 import css from './ExamPage.module.css';
 import { useQuery } from '@tanstack/react-query';
 import { getExamTest } from '@/lib/api';
-import TestResults from '@/components/TestPage/TestResults/TestResults';
 import QuestionStepper from '@/components/TestPage/QuestionStepper/QuestionStepper';
 import TestProgress from '@/components/TestPage/TestProgress/TestProgress';
 import QuestionContent from '@/components/TestPage/QuestionContent/QuestionContent';
 import { Test } from '@/types/tests';
 import QuestionOptions from '@/components/TestPage/QuestionOptions/QuestionOptions';
 import TestControls from '@/components/TestPage/TestControls/TestControls';
+import Timer from '@/components/TestPage/Timer/Timer';
+import ExamFail from '@/components/TestPage/ExamResults/ExamFail';
+import ExamSuccess from '@/components/TestPage/ExamResults/ExamSuccess';
 
 const fallbackQuestion: Test = {
     _id: "q1", id: "r1q4", image: [],
@@ -23,12 +25,13 @@ const fallbackQuestion: Test = {
     explanation: "Велосипедна смуга виконується в межах проїзної частини, тому вона до неї належить."
 };
 
-const TestPageClient = () => {
+const ExamPageClient = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number>>({});
     const [isFinished, setIsFinished] = useState(false);
     const [checkedAnswers, setCheckedAnswers] = useState<Record<string, boolean>>({});
-    //const [timeLeft, setTimeLeft] = useState(20 * 60);
+    const [wrongAnswerCount, setWrongAnswerCount] = useState(0);
+    const [timeLeft, setTimeLeft] = useState(1200);
 
     useEffect(() => {
         window.scrollTo({
@@ -51,7 +54,17 @@ const TestPageClient = () => {
         if (isCurrentChecked) return;
         setSelectedAnswers(prev => ({ ...prev, [currentQuestion.id]: optionId }));
     };
-    const handleCheckAnswer = () => setCheckedAnswers(prev => ({ ...prev, [currentQuestion.id]: true }));
+    const handleCheckAnswer = () => {
+        setCheckedAnswers(prev => ({ ...prev, [currentQuestion.id]: true }));
+        if (selectedAnswers[currentQuestion.id] !== currentQuestion.correct_option_id) {
+            setWrongAnswerCount(prev => prev + 1);
+            console.log(wrongAnswerCount)
+            console.log("не правильна відповідь");
+            if (wrongAnswerCount === 2) {
+                setIsFinished(true);
+            }
+        };
+    }
     const handleNext = () => currentIndex < totalQuestions - 1 && setCurrentIndex(prev => prev + 1);
     const handlePrev = () => currentIndex > 0 &&  setCurrentIndex(prev => prev - 1);
     const handleFinish = () => setIsFinished(true);
@@ -60,12 +73,13 @@ const TestPageClient = () => {
         setCurrentIndex(0);
         setSelectedAnswers({});
         setCheckedAnswers({});
+        setWrongAnswerCount(0);
+        setTimeLeft(1200);
     };
     
-/*     useEffect(() => {
+     useEffect(() => {
         // Якщо тест завершено або час вийшов — зупиняємо таймер
         if (isFinished || timeLeft <= 0) return;
-
         const timerId = setInterval(() => {
             setTimeLeft((prevTime) => {
                 if (prevTime <= 1) {
@@ -79,30 +93,30 @@ const TestPageClient = () => {
 
         // Очищення інтервалу при розмонтуванні компонента
         return () => clearInterval(timerId);
-    }, [isFinished, timeLeft]); */
-    
-/*     const formatTime = (seconds: number) => {
-        const m = Math.floor(seconds / 60).toString().padStart(2, '0');
-        const s = (seconds % 60).toString().padStart(2, '0');
-        return `${m}:${s}`;
-    }; */
+    }, [isFinished, timeLeft]); 
 
     if (isFinished) {
         const correctAnswersCount = tests?.reduce((acc, question) => {
             return selectedAnswers[question.id] === question.correct_option_id ? acc + 1 : acc;
         }, 0);
 
-        return (
-            <section className={css.section}>
-                <div className={css.container}>
-                    <TestResults
-                        correctAnswersCount={correctAnswersCount}
-                        totalQuestions={totalQuestions}
-                        onRetry={handleRetry}
-                    />
-                </div>
-            </section>
-        );
+        if (correctAnswersCount !== undefined && correctAnswersCount > 17) {
+            return (
+                <section className={css.section}>
+                    <div className={css.container}>
+                       <ExamSuccess onRetry={handleRetry}/>
+                    </div>
+                </section>
+            );
+        } else {
+            return (
+                <section className={css.section}>
+                    <div className={css.container}>
+                        <ExamFail onRetry={handleRetry} mistakesCount={wrongAnswerCount}/>
+                    </div>
+                </section>
+            );
+        }
     }
 
     return (
@@ -116,13 +130,7 @@ const TestPageClient = () => {
                         selectedAnswers={selectedAnswers}
                         onStepClick={setCurrentIndex}
                     />
-                    {/* <div className={`${css.timer} ${timeLeft <= 60 ? css.timerDanger : ''}`}>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={css.timerIcon}>
-                             <circle cx="12" cy="12" r="10"></circle>
-                             <polyline points="12 6 12 12 16 14"></polyline>
-                        </svg>
-                        {formatTime(timeLeft)}
-                    </div> */}
+                    <Timer timeLeft={timeLeft}/>
                    
                     <TestProgress
                         currentIndex={currentIndex}
@@ -153,40 +161,4 @@ const TestPageClient = () => {
     );
 };
 
-export default TestPageClient;
-
-
-                           /*  <div className={`${css.timer} ${timeLeft <= 60 ? css.timerDanger : ''}`}>
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={css.timerIcon}>
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                {formatTime(timeLeft)}
-                            </div> */
-
-/*   const [timeLeft, setTimeLeft] = useState(20 * 60); */
-                          
-/* useEffect(() => {
-        // Якщо тест завершено або час вийшов — зупиняємо таймер
-        if (isFinished || timeLeft <= 0) return;
-
-        const timerId = setInterval(() => {
-            setTimeLeft((prevTime) => {
-                if (prevTime <= 1) {
-                    clearInterval(timerId);
-                    handleFinish(); // Автоматично завершуємо тест, якщо час вийшов
-                    return 0;
-                }
-                return prevTime - 1;
-            });
-        }, 1000);
-
-        // Очищення інтервалу при розмонтуванні компонента
-        return () => clearInterval(timerId);
-    }, [isFinished, timeLeft]); // Залежності хука */
-
-/*         const formatTime = (seconds: number) => {
-        const m = Math.floor(seconds / 60).toString().padStart(2, '0');
-        const s = (seconds % 60).toString().padStart(2, '0');
-        return `${m}:${s}`;
-    }; */
+export default ExamPageClient;

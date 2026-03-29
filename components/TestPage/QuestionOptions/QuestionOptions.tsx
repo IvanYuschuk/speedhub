@@ -1,5 +1,5 @@
 import { Test } from "@/types/tests";
-import css from "./QuestionOptions.module.css"
+import css from "./QuestionOptions.module.css";
 
 interface QuestionOptionsProps {
     question: Test;
@@ -26,7 +26,7 @@ const QuestionOptions = ({ question, selectedAnswerId, isCurrentChecked, onOptio
 
                 return (
                     <button
-                        key={option._id}
+                        key={option.id}
                         type="button"
                         className={`${css.optionBtn} ${optionStatusClass}`}
                         onClick={() => onOptionSelect(option.id)}

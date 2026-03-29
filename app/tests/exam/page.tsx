@@ -2,7 +2,7 @@ import { getExamTest } from "@/lib/api";
 import { HydrationBoundary, QueryClient, dehydrate} from "@tanstack/react-query";
 import ExamPageClient from "./ExamPage.Client";
 
-const examPage = async () => {
+const ExamPage = async () => {
     const queryClient = new QueryClient();
 
     await queryClient.prefetchQuery({
@@ -17,4 +17,4 @@ const examPage = async () => {
     );
 };
 
-export default examPage;
+export default ExamPage;
