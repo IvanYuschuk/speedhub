@@ -1,13 +1,16 @@
-import { RegisterData, LoginCredentials, User } from "../types/auth";
+import { RegisterData, LoginCredentials } from "@/app/types/auth";
+import { User } from "@/types/user";
 
 interface RegisterResponse {
   message: string;
   user?: User;
 }
 
+const BASE_URL = "https://speedhub-6fam.onrender.com/api/users";
+
 export const authService = {
   async login(credentials: LoginCredentials): Promise<Partial<User>> {
-    const res = await fetch("/api/users/login", {
+    const res = await fetch(`${BASE_URL}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(credentials),
@@ -20,7 +23,7 @@ export const authService = {
   },
 
   async register(data: RegisterData): Promise<RegisterResponse> {
-    const res = await fetch("/api/users/register", {
+    const res = await fetch(`${BASE_URL}/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
