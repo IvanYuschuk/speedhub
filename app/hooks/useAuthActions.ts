@@ -1,53 +1,76 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { authService } from "@/app/services/authService";
-import { LoginCredentials, RegisterData } from "@/app/types/auth";
+import { AuthResponse, LoginValues, RegisterValues } from "@/types/user";
 import { triggerAuthUpdate } from "@/app/utils/auth";
 
 interface AuthError {
-  error?: string;
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
   message?: string;
+  error?: string;
 }
 
 export const useAuthActions = (onClose: () => void) => {
-  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
 
-  const handleLogin = async (values: LoginCredentials) => {
+  const handleLogin = async (values: LoginValues): Promise<void> => {
     setError(null);
     try {
-      const userData = await authService.login(values);
+      const response = (await authService.login(
+        values,
+      )) as unknown as AuthResponse;
 
-      localStorage.setItem("userName", userData.name || "Користувач");
+      const name = response.name || "Користувач";
+      const role = response.role || "user";
+      const surname = response.surname || "";
+      const subscriptionType = response.subscriptionType || "free";
+
+      localStorage.setItem("userName", name);
+      localStorage.setItem("role", role);
+
+      localStorage.setItem(
+        "fullUserData",
+        JSON.stringify({
+          name,
+          surname,
+          role,
+          subscriptionType,
+        }),
+      );
 
       triggerAuthUpdate();
 
-      onClose();
+      if (onClose) onClose();
 
-      router.push("/tests");
+      window.location.href = role === "admin" ? "/admin" : "/tests";
     } catch (err: unknown) {
-      const errorData = err as AuthError;
-      const msg =
-        errorData?.error || errorData?.message || "Невірний логін або пароль";
-      setError(msg);
-      throw err;
+      const errorParsed = err as AuthError;
+      setError(
+        errorParsed.response?.data?.message ||
+          errorParsed.message ||
+          "Невірний логін або пароль",
+      );
     }
   };
 
-  const handleRegister = async (values: RegisterData) => {
+  const handleRegister = async (values: RegisterValues): Promise<void> => {
     setError(null);
     try {
       await authService.register(values);
       alert("Успішно! Тепер увійдіть.");
-      onClose();
+      if (onClose) onClose();
     } catch (err: unknown) {
-      const errorData = err as AuthError;
-      const msg =
-        errorData?.error || errorData?.message || "Помилка реєстрації";
-      setError(msg);
-      throw err;
+      const errorParsed = err as AuthError;
+      setError(
+        errorParsed.response?.data?.message ||
+          errorParsed.message ||
+          "Помилка реєстрації",
+      );
     }
   };
 

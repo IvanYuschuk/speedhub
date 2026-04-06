@@ -1,0 +1,26 @@
+.adminContainer {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--section-bg);
+  color: var(--section-text-title);
+}
+
+.mainContent {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.placeholderCard {
+  padding: 20px;
+  background: var(--section-card-bg);
+  border-radius: 12px;
+  border: 1px solid var(--section-card-border);
+}
+
+.placeholderCard h3 {
+  margin: 0;
+  color: var(--section-text-title);
+}
