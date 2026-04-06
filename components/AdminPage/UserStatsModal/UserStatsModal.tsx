@@ -59,7 +59,7 @@ export default function UserStatsModal({ user, onClose }: UserStatsModalProps) {
           {!isAdmin && (
             <section className={css.section}>
               <h3>Статистика тестів</h3>
-              {user.statistics?.unitsPassed &&
+              {/* {user.statistics?.unitsPassed &&
               user.statistics.unitsPassed.length > 0 ? (
                 <div className={css.statsGrid}>
                   {user.statistics.unitsPassed.map((unit, index) => (
@@ -84,7 +84,7 @@ export default function UserStatsModal({ user, onClose }: UserStatsModalProps) {
                 </div>
               ) : (
                 <p className={css.noData}>Користувач ще не проходив тестів</p>
-              )}
+              )} */}
             </section>
           )}
         </div>
