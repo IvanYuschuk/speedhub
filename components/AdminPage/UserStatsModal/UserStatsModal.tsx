@@ -40,7 +40,7 @@ export default function UserStatsModal({ user, onClose }: UserStatsModalProps) {
               ID: <span>{user._id}</span>
             </p>
             <p>
-              Ім'я:{" "}
+              {"Ім'я: "}{" "}
               <span>
                 {user.name} {user.surname}
               </span>
