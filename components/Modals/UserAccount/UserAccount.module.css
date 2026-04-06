@@ -1,14 +1,14 @@
 .dropdown {
   position: absolute;
-  top: calc(100% + 10px); /* Чітко під кнопкою */
+  top: calc(100% + 10px);
   right: 0;
-  width: 240px;
+  width: 260px;
   background: var(--section-bg);
   border: 1px solid var(--section-card-border);
   border-radius: 16px;
   padding: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  z-index: 1000; /* Щоб була ПОВЕРХ усього */
+  z-index: 1000;
   color: var(--section-text-title);
   text-align: left;
 }
@@ -29,6 +29,29 @@
   height: 1px;
   background: var(--section-card-border);
   margin: 15px 0;
+}
+
+/* СТИЛІ ДЛЯ КНОПКИ АДМІНА */
+.adminPanelBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  background: rgba(59, 130, 246, 0.1); /* Блакитний фон */
+  color: #3b82f6; /* Блакитний текст */
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.adminPanelBtn:hover {
+  background: #3b82f6;
+  color: #ffffff;
 }
 
 .infoGroup {

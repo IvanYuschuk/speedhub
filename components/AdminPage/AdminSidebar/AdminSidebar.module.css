@@ -1,0 +1,55 @@
+.sidebar {
+  width: 280px;
+  background: var(--header-footer-bg);
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.logo {
+  color: var(--header-logo-burger);
+  text-align: center;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.logoAccent {
+  color: var(--header-footer-hub);
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.navBtn {
+  padding: 14px 20px;
+  border-radius: 12px;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  background: transparent;
+  color: var(--header-links-footer-text);
+  display: flex;
+  align-items: center;
+}
+
+.navBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--header-logo-burger);
+}
+
+.active {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: var(--header-logo-burger) !important;
+}
+
+.icon {
+  margin-right: 12px;
+  font-size: 18px;
+}
