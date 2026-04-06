@@ -1,0 +1,229 @@
+.container {
+  background: var(--section-card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--section-card-border);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px; /* Виправлено тут */
+}
+
+.header h3 {
+  margin: 0;
+  color: var(--section-text-title);
+}
+
+.addButton {
+  padding: 10px 20px;
+  background: var(--accent-color);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.tableContainer {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tableHeader {
+  text-align: left;
+  border-bottom: 2px solid var(--section-card-border);
+}
+
+.tableHeader th {
+  padding: 12px;
+  color: var(--section-text-title);
+  font-weight: 600;
+}
+
+.tableRow {
+  border-bottom: 1px solid var(--section-card-border);
+  transition: background-color 0.2s;
+}
+
+.tableRow:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.tableCell {
+  padding: 12px;
+  color: var(--section-text-main);
+}
+
+.questionText {
+  max-width: 400px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.categoryBadge {
+  background: var(--section-bg);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  border: 1px solid var(--section-card-border);
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.editButton {
+  color: var(--accent-color);
+  background: none;
+  border: 1px solid var(--accent-color);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.editButton:hover {
+  background: var(--accent-color);
+  color: #fff;
+}
+
+.deleteButton {
+  color: #ff4d4f;
+  background: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.deleteButton:hover {
+  background-color: rgba(255, 77, 79, 0.1);
+}
+
+.emptyCell {
+  text-align: center;
+  padding: 40px;
+  color: var(--section-text-main);
+}
+
+/* Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: var(--section-card-bg);
+  padding: 24px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  border: 1px solid var(--section-card-border);
+}
+
+.modal h4 {
+  margin-top: 0;
+  color: var(--section-text-title);
+  margin-bottom: 16px;
+}
+
+.input {
+  width: 100%;
+  padding: 12px;
+  background: var(--section-bg);
+  border: 1px solid var(--section-card-border);
+  border-radius: 8px;
+  color: var(--section-text-main);
+  margin-bottom: 20px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.saveButton {
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cancelButton {
+  background: none;
+  border: 1px solid var(--section-card-border);
+  color: var(--section-text-main);
+  padding: 8px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.filterSection {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.select {
+  padding: 8px 12px;
+  background: var(--section-bg);
+  border: 1px solid var(--section-card-border);
+  border-radius: 8px;
+  color: var(--section-text-main);
+  outline: none;
+  max-width: 300px;
+}
+
+.select option {
+  background: var(--section-card-bg);
+}
+
+.titleGroup {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.topicSelect {
+  background: var(--section-bg);
+  color: var(--section-text-title);
+  border: 1px solid var(--section-card-border);
+  padding: 8px 12px;
+  border-radius: 8px;
+  outline: none;
+  cursor: pointer;
+}
+
+.idBadge {
+  color: var(--accent-color);
+  font-family: monospace;
+  background: rgba(var(--accent-color-rgb), 0.1);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
