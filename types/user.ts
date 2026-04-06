@@ -10,6 +10,21 @@ export interface User {
   updatedAt: string;
 }
 
-export interface AuthResponse extends User {
+export interface AuthResponse {
   token: string;
+  name: string;
+  surname?: string;
+  role: "user" | "admin";
+  subscriptionType: "free" | "premium";
+  subscriptionExpires: string | null;
+}
+
+export interface LoginValues {
+  email?: string;
+  password?: string;
+}
+
+export interface RegisterValues extends LoginValues {
+  name: string;
+  surname?: string;
 }

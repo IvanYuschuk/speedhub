@@ -1,0 +1,92 @@
+.container {
+  background: var(--section-card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--section-card-border);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  marginbottom: 20px;
+}
+
+.header h3 {
+  margin: 0;
+  color: var(--section-text-title);
+}
+
+.addButton {
+  padding: 10px 20px;
+  background: var(--accent-color);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.addButton:hover {
+  opacity: 0.9;
+}
+
+.tableContainer {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.tableHeader {
+  text-align: left;
+  border-bottom: 2px solid var(--section-card-border);
+  color: var(--section-text-title);
+}
+
+.tableHeader th {
+  padding: 12px;
+  font-weight: 600;
+}
+
+.tableRow {
+  border-bottom: 1px solid var(--section-card-border);
+  transition: background-color 0.2s;
+}
+
+.tableRow:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.tableCell {
+  padding: 12px;
+  color: var(--section-text-main);
+}
+
+.categoryBadge {
+  background: var(--section-bg);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+.deleteButton {
+  color: #ff4d4f;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.deleteButton:hover {
+  background-color: rgba(255, 77, 79, 0.1);
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--section-text-main);
+}

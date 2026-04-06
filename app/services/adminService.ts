@@ -9,46 +9,32 @@ export interface UpdateUserData {
 const BASE_URL = "https://speedhub-6fam.onrender.com/api/admin";
 
 /**
- * Функція для видобутку токена з усіх можливих джерел.
- * Орієнтована на специфіку Safari (ITP та блокування сховищ).
+ * Функція для отримання токена з усіх можливих джерел.
+ * Оптимізована під суворі правила Safari ITP.
  */
 const getToken = () => {
   if (typeof window === "undefined") return null;
 
   let token = null;
 
-  // 1. Пріоритет №1 (Safari): Пряме розрізання URL-рядка
-  // Це працює навіть якщо URLSearchParams заблоковано
-  const href = window.location.href;
-  if (href.includes("t=")) {
-    try {
-      const urlPart = href.split("t=")[1];
-      token = urlPart.split("&")[0].split("#")[0];
-      if (token) {
-        // Пробуємо зберегти для наступних запитів, якщо Safari дозволить
-        localStorage.setItem("token", token);
-        sessionStorage.setItem("token", token);
-      }
-    } catch (e) {
-      console.error("DEBUG: Помилка парсингу токена з URL", e);
+  // 1. Найвищий пріоритет: параметр у URL (працює при редіректі з логіну)
+  const params = new URLSearchParams(window.location.search);
+  token = params.get("t");
+
+  // 2. Якщо в URL немає, шукаємо в Cookies (твої accessToken)
+  if (!token) {
+    const allCookies = document.cookie.split('; ');
+    const found = allCookies.find(row => 
+      row.trim().startsWith('accessToken=') || row.trim().startsWith('token=')
+    );
+    if (found) {
+      token = found.split('=')[1];
     }
   }
 
-  // 2. Пріоритет №2: SessionStorage
-  // Іноді Safari дозволяє sessionStorage, коли localStorage під санкціями
+  // 3. Останній шанс: LocalStorage
   if (!token) {
-    token = sessionStorage.getItem("token");
-  }
-
-  // 3. Пріоритет №3: Cookies
-  if (!token) {
-    const match = document.cookie.match(new RegExp('(^| )token=([^;]+)'));
-    if (match) token = match[2];
-  }
-
-  // 4. Пріоритет №4: LocalStorage
-  if (!token) {
-    token = localStorage.getItem("token");
+    token = localStorage.getItem("token") || localStorage.getItem("accessToken");
   }
 
   return token;
@@ -56,28 +42,26 @@ const getToken = () => {
 
 export const adminService = {
   /**
-   * Отримання списку всіх користувачів
+   * Отримання всіх користувачів
    */
   getAllUsers: async (): Promise<User[]> => {
     const token = getToken();
     
-    // КРИТИЧНИЙ ЛОГ: Якщо тут "НІ (null)", значить Safari заблокував доступ до URL
-    console.log("DEBUG: Відправляю токен в Safari:", token ? "ТАК (рядок є)" : "НІ (null)");
+    console.log("DEBUG SAFARI: Відправляю токен:", token ? "ТАК (є рядок)" : "НІ (null)");
 
     const response = await fetch(`${BASE_URL}/users`, {
       method: "GET",
+      // КРИТИЧНО: credentials дозволяє Safari додавати куки до запиту автоматично
+      credentials: "include", 
       headers: {
         "Authorization": `Bearer ${token}`,
         "Content-Type": "application/json",
-        "Accept": "application/json",
-        "Cache-Control": "no-cache" // Забороняємо Safari кешувати помилку 401
+        "Accept": "application/json"
       }
     });
 
     if (!response.ok) {
-      if (response.status === 401) {
-        throw new Error("Помилка 401: Доступ заборонено (токен недійсний або відсутній)");
-      }
+      if (response.status === 401) throw new Error("Помилка 401: Доступ заборонено (токен недійсний)");
       throw new Error(`Помилка сервера: ${response.status}`);
     }
 
@@ -91,13 +75,14 @@ export const adminService = {
     const token = getToken();
     const response = await fetch(`${BASE_URL}/users/${id}`, {
       method: "PUT",
+      credentials: "include",
       headers: {
         "Authorization": `Bearer ${token}`,
         "Content-Type": "application/json"
       },
       body: JSON.stringify(data)
     });
-
+    
     if (!response.ok) throw new Error("Помилка при оновленні");
     return response.json();
   },
@@ -109,12 +94,13 @@ export const adminService = {
     const token = getToken();
     const response = await fetch(`${BASE_URL}/reviews/${id}`, {
       method: "DELETE",
+      credentials: "include",
       headers: { 
         "Authorization": `Bearer ${token}`,
         "Content-Type": "application/json"
       }
     });
-
+    
     if (!response.ok) throw new Error("Помилка при видаленні відгуку");
     return response.json();
   },
@@ -126,12 +112,13 @@ export const adminService = {
     const token = getToken();
     const response = await fetch(`${BASE_URL}/users/${id}`, {
       method: "DELETE",
+      credentials: "include",
       headers: { 
         "Authorization": `Bearer ${token}`,
         "Content-Type": "application/json"
       }
     });
-
+    
     if (!response.ok) throw new Error("Помилка при видаленні користувача");
     return response.json();
   }
