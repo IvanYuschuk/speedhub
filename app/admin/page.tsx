@@ -22,7 +22,6 @@ export default function AdminPage() {
 
   useEffect(() => {
     const data = localStorage.getItem("fullUserData");
-    
     const storedRole = localStorage.getItem("role");
 
     if (data || storedRole) {
@@ -32,7 +31,8 @@ export default function AdminPage() {
 
         if (role === "admin") {
           setIsAuthorized(true);
-          setToken(localStorage.getItem("token") || "authorized");
+          // Беремо справжній токен для запитів
+          setToken(localStorage.getItem("token"));
         } else {
           router.push("/");
         }
@@ -47,7 +47,9 @@ export default function AdminPage() {
   const loadUsers = useCallback(async () => {
     try {
       setLoading(true);
-      const data = await adminService.getAllUsers();
+      // Передаємо токен у сервіс (переконайся, що adminService його приймає)
+      const currentToken = localStorage.getItem("token");
+      const data = await adminService.getAllUsers(currentToken);
       setUsers(data);
     } catch (err) {
       console.error("Помилка завантаження користувачів", err);
@@ -87,7 +89,12 @@ export default function AdminPage() {
         />
 
         {activeTab === "users" && (
-          <UserTable users={users} loading={loading} refreshData={loadUsers} />
+          <UserTable
+            users={users}
+            loading={loading}
+            refreshData={loadUsers}
+            token={token}
+          />
         )}
 
         {activeTab === "tests" && <TestManager token={token} />}
