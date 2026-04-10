@@ -14,96 +14,68 @@ export default function AdminPage() {
   const [activeTab, setActiveTab] = useState("users");
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [token, setToken] = useState<string | null>(null);
-
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-
   const router = useRouter();
 
+  // 1. Спершу перевіряємо авторизацію та дістаємо токен
   useEffect(() => {
-    const data = localStorage.getItem("fullUserData");
-    const storedRole = localStorage.getItem("role");
+    const storedToken =
+      localStorage.getItem("token") || localStorage.getItem("accessToken");
+    const role = localStorage.getItem("role");
 
-    if (data || storedRole) {
-      try {
-        const user = data ? JSON.parse(data) : null;
-        const role = user?.role || storedRole;
-
-        if (role === "admin") {
-          setIsAuthorized(true);
-          // Беремо справжній токен для запитів
-          setToken(localStorage.getItem("token"));
-        } else {
-          router.push("/");
-        }
-      } catch (error) {
-        router.push("/");
-      }
+    if (role === "admin" && storedToken) {
+      setToken(storedToken);
+      setIsAuthorized(true);
     } else {
       router.push("/");
     }
   }, [router]);
 
-  const loadUsers = useCallback(async () => {
+  // 2. Функція завантаження, яка приймає токен як аргумент
+  const loadUsers = useCallback(async (currentIdToken: string) => {
     try {
       setLoading(true);
-      // Передаємо токен у сервіс (переконайся, що adminService його приймає)
-      const currentToken = localStorage.getItem("token");
-      const data = await adminService.getAllUsers(currentToken);
+      const data = await adminService.getAllUsers(currentIdToken);
       setUsers(data);
     } catch (err) {
-      console.error("Помилка завантаження користувачів", err);
+      console.error("Помилка завантаження користувачів:", err);
     } finally {
       setLoading(false);
     }
   }, []);
 
+  // 3. Слідкуємо за готовністю токена
   useEffect(() => {
-    if (isAuthorized && activeTab === "users") {
-      loadUsers();
+    if (isAuthorized && token && activeTab === "users") {
+      loadUsers(token);
     }
-  }, [isAuthorized, activeTab, loadUsers]);
+  }, [isAuthorized, token, activeTab, loadUsers]);
 
-  if (!isAuthorized) return null;
-
-  const total = users.length;
-  const premiumCount = users.filter(
-    (u) => u.subscriptionType === "premium",
-  ).length;
+  if (!isAuthorized || !token) return null;
 
   return (
     <div className={styles.adminContainer}>
       <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-
       <main className={styles.mainContent}>
         <AdminHeader
-          title={
-            activeTab === "users"
-              ? "Керування користувачами"
-              : activeTab === "lectures"
-                ? "Редактор лекцій"
-                : "База питань ПДР"
+          title={activeTab === "users" ? "Користувачі" : "Тести"}
+          totalUsers={users.length}
+          premiumUsers={
+            users.filter((u) => u.subscriptionType === "premium").length
           }
-          totalUsers={total}
-          premiumUsers={premiumCount}
         />
 
         {activeTab === "users" && (
           <UserTable
             users={users}
             loading={loading}
-            refreshData={loadUsers}
+            refreshData={() => loadUsers(token)}
             token={token}
           />
         )}
 
         {activeTab === "tests" && <TestManager token={token} />}
-
-        {activeTab === "lectures" && (
-          <div className={styles.placeholderCard}>
-            <h3>Списки лекцій будуть тут...</h3>
-          </div>
-        )}
       </main>
     </div>
   );

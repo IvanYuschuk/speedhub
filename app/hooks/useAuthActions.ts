@@ -25,14 +25,24 @@ export const useAuthActions = (onClose: () => void) => {
         values,
       )) as unknown as AuthResponse;
 
+      // ВИГРУЖАЄМО ДАНІ
       const name = response.name || "Користувач";
       const role = response.role || "user";
       const surname = response.surname || "";
       const subscriptionType = response.subscriptionType || "free";
 
-      // 1. Записуємо дані в LocalStorage
+      // КРИТИЧНО: Беремо реальний токен з відповіді сервера
+      // Переконайся, що в типах AuthResponse є поле token або accessToken
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const token = (response as any).token || (response as any).accessToken;
+
+      // 1. Записуємо дані в LocalStorage (включаючи реальний токен!)
       localStorage.setItem("userName", name);
       localStorage.setItem("role", role);
+      if (token) {
+        localStorage.setItem("token", token);
+      }
+
       localStorage.setItem(
         "fullUserData",
         JSON.stringify({
@@ -43,22 +53,20 @@ export const useAuthActions = (onClose: () => void) => {
         }),
       );
 
-      // 2. ПРИМУСОВИЙ ЗАПИС КУК ДЛЯ VERCEL
-      // Оскільки сервер на Render не може прокинути куку на домен Vercel автоматично,
-      // ми ставимо її вручну. Це дозволить Middleware побачити авторизацію.
-      const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString();
-      
-      // Ми використовуємо "true" або будь-яке значення, якщо токена немає в JSON,
-      // але зазвичай краще, щоб бекенд його присилав. 
-      // Якщо в response таки з'явиться поле token, заміни 'authorized' на response.token
-      document.cookie = `token=authorized; expires=${expires}; path=/; SameSite=Lax;`;
-      document.cookie = `accessToken=authorized; expires=${expires}; path=/; SameSite=Lax;`;
+      // 2. ПРИМУСОВИЙ ЗАПИС РЕАЛЬНОГО ТОКЕНА В КУКИ ДЛЯ VERCEL
+      if (token) {
+        const expires = new Date(
+          Date.now() + 7 * 24 * 60 * 60 * 1000,
+        ).toUTCString();
+        document.cookie = `token=${token}; expires=${expires}; path=/; SameSite=Lax;`;
+        document.cookie = `accessToken=${token}; expires=${expires}; path=/; SameSite=Lax;`;
+      }
 
       triggerAuthUpdate();
 
       if (onClose) onClose();
 
-      // 3. Редірект. Тепер Middleware на Vercel прочитає наші куки
+      // 3. Редірект
       window.location.href = role === "admin" ? "/admin" : "/tests";
     } catch (err: unknown) {
       const errorParsed = err as AuthError;
