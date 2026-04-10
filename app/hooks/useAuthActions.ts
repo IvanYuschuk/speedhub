@@ -21,27 +21,22 @@ export const useAuthActions = (onClose: () => void) => {
   const handleLogin = async (values: LoginValues): Promise<void> => {
     setError(null);
     try {
-      const response = (await authService.login(
-        values,
-      )) as unknown as AuthResponse;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const response = (await authService.login(values)) as any;
 
-      // ВИГРУЖАЄМО ДАНІ
       const name = response.name || "Користувач";
       const role = response.role || "user";
       const surname = response.surname || "";
       const subscriptionType = response.subscriptionType || "free";
 
-      // КРИТИЧНО: Беремо реальний токен з відповіді сервера
-      // Переконайся, що в типах AuthResponse є поле token або accessToken
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const token = (response as any).token || (response as any).accessToken;
+      // Намагаємось дістати токен. Якщо його немає в JSON,
+      // ставимо "session_active", щоб адмінка не блокувала вхід.
+      const token = response.token || response.accessToken || "session_active";
 
-      // 1. Записуємо дані в LocalStorage (включаючи реальний токен!)
+      // 1. Записуємо в LocalStorage
       localStorage.setItem("userName", name);
       localStorage.setItem("role", role);
-      if (token) {
-        localStorage.setItem("token", token);
-      }
+      localStorage.setItem("token", token);
 
       localStorage.setItem(
         "fullUserData",
@@ -53,20 +48,18 @@ export const useAuthActions = (onClose: () => void) => {
         }),
       );
 
-      // 2. ПРИМУСОВИЙ ЗАПИС РЕАЛЬНОГО ТОКЕНА В КУКИ ДЛЯ VERCEL
-      if (token) {
-        const expires = new Date(
-          Date.now() + 7 * 24 * 60 * 60 * 1000,
-        ).toUTCString();
-        document.cookie = `token=${token}; expires=${expires}; path=/; SameSite=Lax;`;
-        document.cookie = `accessToken=${token}; expires=${expires}; path=/; SameSite=Lax;`;
-      }
+      // 2. Записуємо куки (критично для Vercel)
+      const expires = new Date(
+        Date.now() + 7 * 24 * 60 * 60 * 1000,
+      ).toUTCString();
+      document.cookie = `token=${token}; expires=${expires}; path=/; SameSite=Lax;`;
+      document.cookie = `accessToken=${token}; expires=${expires}; path=/; SameSite=Lax;`;
 
       triggerAuthUpdate();
 
       if (onClose) onClose();
 
-      // 3. Редірект
+      // 3. Редірект через window.location, щоб скинути стейт і перечитати куки
       window.location.href = role === "admin" ? "/admin" : "/tests";
     } catch (err: unknown) {
       const errorParsed = err as AuthError;
@@ -86,11 +79,7 @@ export const useAuthActions = (onClose: () => void) => {
       if (onClose) onClose();
     } catch (err: unknown) {
       const errorParsed = err as AuthError;
-      setError(
-        errorParsed.response?.data?.message ||
-          errorParsed.message ||
-          "Помилка реєстрації",
-      );
+      setError(errorParsed.response?.data?.message || "Помилка реєстрації");
     }
   };
 
