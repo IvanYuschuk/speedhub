@@ -16,28 +16,49 @@ export default function AdminPage() {
   const [token, setToken] = useState<string | null>(null);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const [checkingAuth, setCheckingAuth] = useState(true); // Новий стейт завантаження авторизації
   const router = useRouter();
 
-  // 1. Спершу перевіряємо авторизацію та дістаємо токен
+  // 1. Перевірка авторизації з невеликим "запасом" часу
   useEffect(() => {
-    const storedToken =
-      localStorage.getItem("token") || localStorage.getItem("accessToken");
-    const role = localStorage.getItem("role");
+    const checkAuth = () => {
+      const storedToken =
+        localStorage.getItem("token") || localStorage.getItem("accessToken");
+      const role = localStorage.getItem("role");
 
-    if (role === "admin" && storedToken) {
-      setToken(storedToken);
-      setIsAuthorized(true);
-    } else {
-      router.push("/");
-    }
+      if (role === "admin" && storedToken) {
+        setToken(storedToken);
+        setIsAuthorized(true);
+        setCheckingAuth(false);
+      } else {
+        // Якщо даних немає, даємо шансу (буває затримка запису на Vercel)
+        const timeout = setTimeout(() => {
+          const retryToken =
+            localStorage.getItem("token") ||
+            localStorage.getItem("accessToken");
+          const retryRole = localStorage.getItem("role");
+
+          if (retryRole === "admin" && retryToken) {
+            setToken(retryToken);
+            setIsAuthorized(true);
+            setCheckingAuth(false);
+          } else {
+            router.push("/");
+          }
+        }, 500);
+        return () => clearTimeout(timeout);
+      }
+    };
+
+    checkAuth();
   }, [router]);
 
-  // 2. Функція завантаження, яка приймає токен як аргумент
+  // 2. Функція завантаження користувачів
   const loadUsers = useCallback(async (currentIdToken: string) => {
     try {
       setLoading(true);
       const data = await adminService.getAllUsers(currentIdToken);
-      setUsers(data);
+      setUsers(data || []);
     } catch (err) {
       console.error("Помилка завантаження користувачів:", err);
     } finally {
@@ -52,18 +73,34 @@ export default function AdminPage() {
     }
   }, [isAuthorized, token, activeTab, loadUsers]);
 
+  // Поки перевіряємо - показуємо пустий екран або спінер
+  if (checkingAuth) {
+    return <div className={styles.loadingContainer}>Перевірка доступу...</div>;
+  }
+
+  // Якщо перевірка пройшла, але ми не авторизовані (про всяк випадок)
   if (!isAuthorized || !token) return null;
+
+  const total = users.length;
+  const premiumCount = users.filter(
+    (u) => u.subscriptionType === "premium",
+  ).length;
 
   return (
     <div className={styles.adminContainer}>
       <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+
       <main className={styles.mainContent}>
         <AdminHeader
-          title={activeTab === "users" ? "Користувачі" : "Тести"}
-          totalUsers={users.length}
-          premiumUsers={
-            users.filter((u) => u.subscriptionType === "premium").length
+          title={
+            activeTab === "users"
+              ? "Керування користувачами"
+              : activeTab === "tests"
+                ? "База питань ПДР"
+                : "Редактор лекцій"
           }
+          totalUsers={total}
+          premiumUsers={premiumCount}
         />
 
         {activeTab === "users" && (
@@ -76,6 +113,12 @@ export default function AdminPage() {
         )}
 
         {activeTab === "tests" && <TestManager token={token} />}
+
+        {activeTab === "lectures" && (
+          <div className={styles.placeholderCard}>
+            <h3>Списки лекцій будуть тут...</h3>
+          </div>
+        )}
       </main>
     </div>
   );
