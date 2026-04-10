@@ -22,8 +22,12 @@ export default function AdminPage() {
   // 1. Перевірка авторизації з невеликим "запасом" часу
   useEffect(() => {
     const checkAuth = () => {
-      const storedToken =
-        localStorage.getItem("token") || localStorage.getItem("accessToken");
+      const cookieToken = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("accessToken="))
+      ?.split("=")[1];
+      
+      const storedToken = localStorage.getItem("token") || localStorage.getItem("accessToken") || cookieToken;
       const role = localStorage.getItem("role");
 
       if (role === "admin" && storedToken) {

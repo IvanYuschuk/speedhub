@@ -8,9 +8,28 @@ export interface UpdateUserData {
 
 const BASE_URL = "https://speedhub-6fam.onrender.com/api/admin";
 
+// Функція для витягування accessToken з кук (як на твоєму скріні)
+const getCookieToken = () => {
+  if (typeof document === "undefined") return null;
+  const name = "accessToken=";
+  const decodedCookie = decodeURIComponent(document.cookie);
+  const ca = decodedCookie.split(";");
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) === " ") {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) === 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return null;
+};
+
 export const adminService = {
-  getAllUsers: async (token: string | null): Promise<User[]> => {
-    if (!token) throw new Error("Токен відсутній");
+  getAllUsers: async (manualToken?: string | null): Promise<User[]> => {
+    // Пріоритет: токен з аргументу або токен з кук
+    const token = manualToken || getCookieToken();
 
     const response = await fetch(`${BASE_URL}/users`, {
       method: "GET",
@@ -27,8 +46,9 @@ export const adminService = {
   updateUser: async (
     id: string,
     data: UpdateUserData,
-    token: string | null,
+    manualToken?: string | null,
   ): Promise<User> => {
+    const token = manualToken || getCookieToken();
     const response = await fetch(`${BASE_URL}/users/${id}`, {
       method: "PUT",
       headers: {
@@ -42,7 +62,11 @@ export const adminService = {
     return response.json();
   },
 
-  deleteUser: async (id: string, token: string | null): Promise<void> => {
+  deleteUser: async (
+    id: string,
+    manualToken?: string | null,
+  ): Promise<void> => {
+    const token = manualToken || getCookieToken();
     const response = await fetch(`${BASE_URL}/users/${id}`, {
       method: "DELETE",
       headers: {
