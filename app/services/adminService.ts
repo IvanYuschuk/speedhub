@@ -9,77 +9,48 @@ export interface UpdateUserData {
 const BASE_URL = "https://speedhub-6fam.onrender.com/api/admin";
 
 export const adminService = {
-  /**
-   * Отримання всіх користувачів
-   */
   getAllUsers: async (token: string | null): Promise<User[]> => {
+    if (!token) throw new Error("Токен відсутній");
+
     const response = await fetch(`${BASE_URL}/users`, {
       method: "GET",
-      credentials: "include", 
       headers: {
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
-        "Accept": "application/json"
-      }
+      },
     });
 
-    if (!response.ok) {
-      if (response.status === 401) throw new Error("Помилка 401: Доступ заборонено");
-      throw new Error(`Помилка сервера: ${response.status}`);
-    }
-
+    if (!response.ok) throw new Error(`Помилка: ${response.status}`);
     return response.json();
   },
 
-  /**
-   * Оновлення даних користувача
-   */
-  updateUser: async (id: string, data: UpdateUserData, token: string | null): Promise<User> => {
+  updateUser: async (
+    id: string,
+    data: UpdateUserData,
+    token: string | null,
+  ): Promise<User> => {
     const response = await fetch(`${BASE_URL}/users/${id}`, {
-      method: "PUT", // Або PATCH, залежно від твого бекенду
-      credentials: "include",
+      method: "PUT",
       headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     });
-    
+
     if (!response.ok) throw new Error("Помилка при оновленні");
     return response.json();
   },
 
-  /**
-   * Видалення користувача
-   */
-  deleteUser: async (id: string, token: string | null): Promise<{ message: string }> => {
+  deleteUser: async (id: string, token: string | null): Promise<void> => {
     const response = await fetch(`${BASE_URL}/users/${id}`, {
       method: "DELETE",
-      credentials: "include",
-      headers: { 
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
-      }
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
     });
-    
-    if (!response.ok) throw new Error("Помилка при видаленні користувача");
-    return response.json();
-  },
 
-  /**
-   * Видалення відгуку
-   */
-  deleteReview: async (id: string, token: string | null): Promise<{ message: string }> => {
-    const response = await fetch(`${BASE_URL}/reviews/${id}`, {
-      method: "DELETE",
-      credentials: "include",
-      headers: { 
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
-      }
-    });
-    
-    if (!response.ok) throw new Error("Помилка при видаленні відгуку");
-    return response.json();
-  }
+    if (!response.ok) throw new Error("Помилка при видаленні");
+  },
 };
