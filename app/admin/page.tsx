@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import AdminSidebar from "@/components/AdminPage/AdminSidebar/AdminSidebar";
 import AdminHeader from "@/components/AdminPage/AdminHeader/AdminHeader";
 import UserTable from "@/components/AdminPage/UserTable/UserTable";
-import TestManager from "@/components/AdminPage/TestManager/TestManager"; 
+import TestManager from "@/components/AdminPage/TestManager/TestManager";
 import { adminService } from "@/app/services/adminService";
 import { User } from "@/types/user";
 import styles from "./AdminPage.module.css";
@@ -22,14 +22,17 @@ export default function AdminPage() {
 
   useEffect(() => {
     const data = localStorage.getItem("fullUserData");
-    const storedToken = localStorage.getItem("token");
+    
+    const storedRole = localStorage.getItem("role");
 
-    if (data && storedToken) {
+    if (data || storedRole) {
       try {
-        const user = JSON.parse(data);
-        if (user.role === "admin") {
+        const user = data ? JSON.parse(data) : null;
+        const role = user?.role || storedRole;
+
+        if (role === "admin") {
           setIsAuthorized(true);
-          setToken(storedToken);
+          setToken(localStorage.getItem("token") || "authorized");
         } else {
           router.push("/");
         }
