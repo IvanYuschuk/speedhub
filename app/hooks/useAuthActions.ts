@@ -30,9 +30,9 @@ export const useAuthActions = (onClose: () => void) => {
       const surname = response.surname || "";
       const subscriptionType = response.subscriptionType || "free";
 
+      // 1. Записуємо дані в LocalStorage
       localStorage.setItem("userName", name);
       localStorage.setItem("role", role);
-
       localStorage.setItem(
         "fullUserData",
         JSON.stringify({
@@ -43,10 +43,22 @@ export const useAuthActions = (onClose: () => void) => {
         }),
       );
 
+      // 2. ПРИМУСОВИЙ ЗАПИС КУК ДЛЯ VERCEL
+      // Оскільки сервер на Render не може прокинути куку на домен Vercel автоматично,
+      // ми ставимо її вручну. Це дозволить Middleware побачити авторизацію.
+      const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString();
+      
+      // Ми використовуємо "true" або будь-яке значення, якщо токена немає в JSON,
+      // але зазвичай краще, щоб бекенд його присилав. 
+      // Якщо в response таки з'явиться поле token, заміни 'authorized' на response.token
+      document.cookie = `token=authorized; expires=${expires}; path=/; SameSite=Lax;`;
+      document.cookie = `accessToken=authorized; expires=${expires}; path=/; SameSite=Lax;`;
+
       triggerAuthUpdate();
 
       if (onClose) onClose();
 
+      // 3. Редірект. Тепер Middleware на Vercel прочитає наші куки
       window.location.href = role === "admin" ? "/admin" : "/tests";
     } catch (err: unknown) {
       const errorParsed = err as AuthError;
