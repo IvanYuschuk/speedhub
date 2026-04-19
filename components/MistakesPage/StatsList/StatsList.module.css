@@ -1,0 +1,173 @@
+.wrapper {
+  width: 100%;
+}
+
+.listTitle {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #1e293b;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.themeGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.item {
+  background: #ffffff;
+  padding: 12px 24px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+}
+
+.themeItem {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  min-height: 120px;
+}
+
+.notStarted {
+  opacity: 0.6;
+  border: 1px dashed rgba(0, 0, 0, 0.1);
+  background: transparent;
+}
+
+.mainInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.date {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.3;
+}
+
+.examMeta {
+  display: flex;
+  align-items: center;
+  gap: 32px; /* Відступ між результатом і таймером */
+}
+
+.resultWrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* Відступ між 1/20 та НЕ СКЛАДЕНО */
+}
+
+.resultRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.passed {
+  color: #10b981;
+  font-weight: 800;
+  font-size: 16px;
+}
+
+.failed {
+  color: #ef4444;
+  font-weight: 800;
+  font-size: 16px;
+}
+
+.status {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 800;
+  opacity: 0.6;
+  white-space: nowrap;
+}
+
+.footerInfo {
+  padding-left: 24px;
+  border-left: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.timeSpent {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.themeContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+@media (prefers-color-scheme: dark) {
+  .themeItem,
+  .item {
+    background: #1e293b;
+    border-color: rgba(255, 255, 255, 0.05);
+  }
+  .name {
+    color: #f1f5f9;
+  }
+  .listTitle {
+    color: #f1f5f9;
+  }
+  .footerInfo {
+    border-left-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+@media (max-width: 768px) {
+  .themeGrid {
+    grid-template-columns: 1fr;
+  }
+  .mainInfo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .examMeta {
+    width: 100%;
+    justify-content: space-between;
+    gap: 0;
+  }
+  .footerInfo {
+    border: none;
+    padding: 0;
+  }
+}

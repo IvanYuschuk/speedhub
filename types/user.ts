@@ -36,11 +36,33 @@ export interface AuthResponse {
 }
 
 export interface LoginValues {
-  email: string; 
+  email: string;
   password: string;
 }
 
 export interface RegisterValues extends LoginValues {
   name: string;
   surname: string;
+}
+
+export interface UnitStat {
+  unitId: string;
+  correctAnswers: number;
+  totalQuestions: number;
+  isPassed: boolean;
+  date: string;
+  mistakes?: string[];
+}
+
+export interface RandomTestStat {
+  score: number;
+  total: number;
+  timeSpent: number;
+  date: string;
+  mistakes?: string[]; 
+}
+
+export interface UserStatistics {
+  unitsPassed: UnitStat[];
+  randomTests: RandomTestStat[];
 }

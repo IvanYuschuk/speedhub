@@ -1,0 +1,38 @@
+.buttonContainer {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.actionButton {
+  padding: 16px 40px;
+  border-radius: 16px;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  width: 100%;
+  max-width: 400px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.checkBtn {
+  background-color: #3b82f6;
+}
+
+.checkBtn:disabled {
+  background-color: var(--section-card-border);
+  cursor: not-allowed;
+}
+
+.nextBtn {
+  background-color: #10b981;
+}
+
+.checkBtn:hover:not(:disabled),
+.nextBtn:hover {
+  filter: brightness(0.9);
+  transform: translateY(-1px);
+}
