@@ -16,6 +16,17 @@ export const authService = {
     const data = await res.json();
     if (!res.ok) throw data;
 
+    // ЗБЕРІГАЄМО ТОКЕН ПРАВИЛЬНО
+    // Якщо бекенд прислав accessToken або token - кладемо його в пам'ять
+    const realToken = data.accessToken || data.token;
+
+    if (realToken && realToken.startsWith("eyJ")) {
+      localStorage.setItem("accessToken", realToken);
+      localStorage.setItem("role", data.role);
+      // ВИДАЛЯЄМО те "session_active", якщо воно там було
+      localStorage.removeItem("token");
+    }
+
     return data as Partial<User>;
   },
 

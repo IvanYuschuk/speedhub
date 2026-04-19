@@ -11,14 +11,12 @@ interface UserTableProps {
   users: User[];
   loading: boolean;
   refreshData: () => Promise<void>;
-  token: string | null; // Додано токен у пропси
 }
 
 export default function UserTable({
   users,
   loading,
   refreshData,
-  token,
 }: UserTableProps) {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [modalConfig, setModalConfig] = useState<{
@@ -63,8 +61,10 @@ export default function UserTable({
       `Змінити роль на ${newRole.toUpperCase()}?`,
       async () => {
         try {
-          await adminService.updateUser(userId, { role: newRole }, token);
+          // Виклик без token — сервіс візьме його з кук сам
+          await adminService.updateUser(userId, { role: newRole });
           await refreshData();
+          closeModal();
         } catch (err) {
           console.error(err);
         }
@@ -89,8 +89,9 @@ export default function UserTable({
             date.setMonth(date.getMonth() + 3);
             updateData.subscriptionExpires = date.toISOString();
           }
-          await adminService.updateUser(userId, updateData, token);
+          await adminService.updateUser(userId, updateData);
           await refreshData();
+          closeModal();
         } catch (err) {
           console.error(err);
         }
@@ -105,12 +106,11 @@ export default function UserTable({
       `Встановити нову дату: ${new Date(newDate).toLocaleDateString("uk-UA")}?`,
       async () => {
         try {
-          await adminService.updateUser(
-            userId,
-            { subscriptionExpires: newDate },
-            token,
-          );
+          await adminService.updateUser(userId, {
+            subscriptionExpires: newDate,
+          });
           await refreshData();
+          closeModal();
         } catch (err) {
           console.error(err);
         }
@@ -124,8 +124,9 @@ export default function UserTable({
       `Видалити користувача ${userName}?`,
       async () => {
         try {
-          await adminService.deleteUser(userId, token);
+          await adminService.deleteUser(userId);
           await refreshData();
+          closeModal();
         } catch (err) {
           console.error(err);
         }

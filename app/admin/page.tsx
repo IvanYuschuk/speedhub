@@ -13,116 +13,58 @@ import styles from "./AdminPage.module.css";
 export default function AdminPage() {
   const [activeTab, setActiveTab] = useState("users");
   const [isAuthorized, setIsAuthorized] = useState(false);
-  const [token, setToken] = useState<string | null>(null);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-  const [checkingAuth, setCheckingAuth] = useState(true); // Новий стейт завантаження авторизації
   const router = useRouter();
 
-  // 1. Перевірка авторизації з невеликим "запасом" часу
   useEffect(() => {
-    const checkAuth = () => {
-      const cookieToken = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("accessToken="))
-      ?.split("=")[1];
-      
-      const storedToken = localStorage.getItem("token") || localStorage.getItem("accessToken") || cookieToken;
-      const role = localStorage.getItem("role");
+    const role = localStorage.getItem("role");
+    const token = localStorage.getItem("token") || localStorage.getItem("accessToken");
 
-      if (role === "admin" && storedToken) {
-        setToken(storedToken);
-        setIsAuthorized(true);
-        setCheckingAuth(false);
-      } else {
-        // Якщо даних немає, даємо шансу (буває затримка запису на Vercel)
-        const timeout = setTimeout(() => {
-          const retryToken =
-            localStorage.getItem("token") ||
-            localStorage.getItem("accessToken");
-          const retryRole = localStorage.getItem("role");
-
-          if (retryRole === "admin" && retryToken) {
-            setToken(retryToken);
-            setIsAuthorized(true);
-            setCheckingAuth(false);
-          } else {
-            router.push("/");
-          }
-        }, 500);
-        return () => clearTimeout(timeout);
-      }
-    };
-
-    checkAuth();
+    if (role === "admin" && token && token !== "undefined") {
+      setIsAuthorized(true);
+    } else {
+      router.push("/");
+    }
   }, [router]);
 
-  // 2. Функція завантаження користувачів
-  const loadUsers = useCallback(async (currentIdToken: string) => {
+  const loadUsers = useCallback(async () => {
     try {
       setLoading(true);
-      const data = await adminService.getAllUsers(currentIdToken);
+      const data = await adminService.getAllUsers();
       setUsers(data || []);
     } catch (err) {
-      console.error("Помилка завантаження користувачів:", err);
+      console.error("Fetch error:", err);
     } finally {
       setLoading(false);
     }
   }, []);
 
-  // 3. Слідкуємо за готовністю токена
   useEffect(() => {
-    if (isAuthorized && token && activeTab === "users") {
-      loadUsers(token);
+    if (isAuthorized && activeTab === "users") {
+      loadUsers();
     }
-  }, [isAuthorized, token, activeTab, loadUsers]);
+  }, [isAuthorized, activeTab, loadUsers]);
 
-  // Поки перевіряємо - показуємо пустий екран або спінер
-  if (checkingAuth) {
-    return <div className={styles.loadingContainer}>Перевірка доступу...</div>;
-  }
-
-  // Якщо перевірка пройшла, але ми не авторизовані (про всяк випадок)
-  if (!isAuthorized || !token) return null;
-
-  const total = users.length;
-  const premiumCount = users.filter(
-    (u) => u.subscriptionType === "premium",
-  ).length;
+  if (!isAuthorized) return null;
 
   return (
     <div className={styles.adminContainer}>
       <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-
       <main className={styles.mainContent}>
         <AdminHeader
-          title={
-            activeTab === "users"
-              ? "Керування користувачами"
-              : activeTab === "tests"
-                ? "База питань ПДР"
-                : "Редактор лекцій"
-          }
-          totalUsers={total}
-          premiumUsers={premiumCount}
+          title={activeTab === "users" ? "Користувачі" : "Тести"}
+          totalUsers={users.length}
+          premiumUsers={users.filter(u => u.subscriptionType === "premium").length}
         />
-
         {activeTab === "users" && (
           <UserTable
             users={users}
             loading={loading}
-            refreshData={() => loadUsers(token)}
-            token={token}
+            refreshData={loadUsers}
           />
         )}
-
-        {activeTab === "tests" && <TestManager token={token} />}
-
-        {activeTab === "lectures" && (
-          <div className={styles.placeholderCard}>
-            <h3>Списки лекцій будуть тут...</h3>
-          </div>
-        )}
+        {activeTab === "tests" && <TestManager />}
       </main>
     </div>
   );

@@ -1,8 +1,8 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,136 +11,239 @@
 }
 
 .modal {
-  background: var(--section-card-bg);
-  border: 1px solid var(--section-card-border);
+  background: #ffffff;
   width: 100%;
-  max-width: 600px;
+  max-width: 550px;
   max-height: 85vh;
-  border-radius: 24px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  border-radius: 28px;
+  box-shadow: 0 20px 60px -10px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  animation: slideUp 0.3s ease-out;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  .overlay {
+    background: rgba(0, 0, 0, 0.75);
+  }
+  .modal {
+    background: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8);
+  }
 }
 
 @keyframes slideUp {
   from {
-    transform: translateY(20px);
+    transform: translateY(30px) scale(0.98);
     opacity: 0;
   }
   to {
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
     opacity: 1;
   }
 }
 
 .header {
-  padding: 20px 24px;
-  border-bottom: 1px solid var(--section-card-border);
+  padding: 24px 32px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--section-icon-bg);
+  background: #fdfdfd;
+}
+
+@media (prefers-color-scheme: dark) {
+  .header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: linear-gradient(to bottom, #222, #1a1a1a);
+  }
 }
 
 .header h2 {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 800;
-  color: var(--section-text-title);
+  color: #18181b;
   margin: 0;
+  letter-spacing: -0.5px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .header h2 {
+    color: #ffffff;
+  }
 }
 
 .closeBtn {
-  background: none;
+  background: rgba(0, 0, 0, 0.05);
   border: none;
-  color: var(--section-text-desc);
-  font-size: 20px;
+  color: #71717a;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  transition: 0.2s;
+  transition: all 0.3s;
+}
+
+@media (prefers-color-scheme: dark) {
+  .closeBtn {
+    background: rgba(255, 255, 255, 0.05);
+    color: #999;
+  }
 }
 
 .closeBtn:hover {
+  background: rgba(239, 68, 68, 0.1);
   color: #ef4444;
   transform: rotate(90deg);
 }
 
 .content {
-  padding: 24px;
+  padding: 32px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 32px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .content {
+    background: #1a1a1a;
+  }
+}
+
+.content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+  }
 }
 
 .section h3 {
-  font-size: 14px;
+  font-size: 12px;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--accent-color);
-  margin-bottom: 12px;
-  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #3b82f6;
+  margin-bottom: 16px;
+  font-weight: 800;
 }
 
 .section p {
-  font-size: 14px;
-  margin: 8px 0;
-  color: var(--section-text-desc);
+  font-size: 15px;
+  margin: 12px 0;
+  color: #52525b;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+
+@media (prefers-color-scheme: dark) {
+  .section p {
+    color: #a1a1aa;
+  }
 }
 
 .section span {
-  color: var(--section-text-title);
+  color: #18181b;
   font-weight: 600;
   word-break: break-all;
-  padding-left: 10px;
+  padding-left: 15px;
   text-align: right;
+}
+
+@media (prefers-color-scheme: dark) {
+  .section span {
+    color: #f4f4f5;
+  }
 }
 
 .statsGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 16px;
 }
 
 .statItem {
-  background: var(--section-bg);
-  padding: 12px;
-  border-radius: 12px;
-  border: 1px solid var(--section-card-border);
+  background: #f8f8f8;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
+}
+
+@media (prefers-color-scheme: dark) {
+  .statItem {
+    background: #242424;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .statItem:hover {
+    background: #2a2a2a;
+  }
 }
 
 .statItem p {
-  font-size: 12px;
-  margin: 4px 0;
-  justify-content: flex-start;
-  gap: 8px;
+  font-size: 13px;
+  margin: 6px 0;
+}
+
+.statItem p span {
+  color: #18181b;
+  font-weight: 700;
+}
+
+@media (prefers-color-scheme: dark) {
+  .statItem p span {
+    color: #ffffff;
+  }
 }
 
 .noData {
   text-align: center;
-  padding: 20px;
-  background: var(--section-bg);
-  border-radius: 12px;
-  border: 1px dashed var(--section-card-border);
-  color: var(--section-text-desc);
+  padding: 30px;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 20px;
+  border: 1px dashed rgba(0, 0, 0, 0.1);
+  color: #71717a;
   font-style: italic;
+  font-size: 14px;
 }
 
-@media (max-width: 480px) {
-  .statsGrid {
-    grid-template-columns: 1fr;
+@media (prefers-color-scheme: dark) {
+  .noData {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed rgba(255, 255, 255, 0.1);
   }
 }
 
-
 .premiumBadge {
-  display: block;
-  font-size: 11px;
-  color: #f59e0b;
-  font-weight: 600;
-  margin-top: 4px;
+  display: inline-block;
+  font-size: 12px;
+  color: #d97706;
+  background: rgba(217, 119, 6, 0.1);
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+  margin-top: 6px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .premiumBadge {
+    color: #fbbf24;
+    background: rgba(251, 191, 36, 0.1);
+  }
 }
 
 .adminText {
@@ -148,7 +251,14 @@
   font-weight: 800;
 }
 
-.statItem p span {
-  color: var(--section-text-title);
-  font-weight: 700;
+@media (max-width: 480px) {
+  .modal {
+    max-height: 95vh;
+    border-radius: 24px 24px 0 0;
+    position: fixed;
+    bottom: 0;
+  }
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
 }

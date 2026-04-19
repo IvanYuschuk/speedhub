@@ -5,42 +5,46 @@ import { testAdminService, Question } from "@/app/services/testAdminService";
 import EditQuestionModal from "@/components/AdminPage/EditQuestionModal/EditQuestionModal";
 import styles from "./TestManager.module.css";
 
-interface TestManagerProps {
-  token: string | null;
-}
-
-export default function TestManager({ token }: TestManagerProps) {
+export default function TestManager() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedTopic, setSelectedTopic] = useState<string>("all");
-
-  // Стан модалки
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
 
   const loadQuestions = useCallback(async () => {
     try {
       setLoading(true);
-      const data = await testAdminService.getAllQuestions(token);
+      const data = await testAdminService.getAllQuestions();
       setQuestions(data);
     } catch (err) {
       console.error(err);
     } finally {
       setLoading(false);
     }
-  }, [token]);
+  }, []);
 
   useEffect(() => {
-    if (token) loadQuestions();
-  }, [loadQuestions, token]);
+    loadQuestions();
+  }, [loadQuestions]);
 
   const handleSave = async (formData: FormData) => {
     try {
-      await testAdminService.saveQuestion(formData, token, editingQuestion?.id);
+      await testAdminService.saveQuestion(formData, editingQuestion?.id);
       setIsModalOpen(false);
       loadQuestions();
     } catch (err) {
       alert("Помилка при збереженні!");
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Ви впевнені, що хочете видалити це питання?")) return;
+    try {
+      await testAdminService.deleteQuestion(id);
+      loadQuestions();
+    } catch (err) {
+      alert("Помилка при видаленні!");
     }
   };
 
@@ -125,9 +129,7 @@ export default function TestManager({ token }: TestManagerProps) {
                 </button>
                 <button
                   className={styles.deleteButton}
-                  onClick={() => {
-                    /* логіка видалення */
-                  }}
+                  onClick={() => handleDelete(q.id)}
                 >
                   Видалити
                 </button>
