@@ -61,14 +61,14 @@ export default function UserTable({
       `Змінити роль на ${newRole.toUpperCase()}?`,
       async () => {
         try {
-          // Виклик без token — сервіс візьме його з кук сам
           await adminService.updateUser(userId, { role: newRole });
           await refreshData();
           closeModal();
         } catch (err) {
-          console.error(err);
+          console.error("Role update error:", err);
         }
       },
+      "info",
     );
   };
 
@@ -93,9 +93,10 @@ export default function UserTable({
           await refreshData();
           closeModal();
         } catch (err) {
-          console.error(err);
+          console.error("Subscription update error:", err);
         }
       },
+      "info",
     );
   };
 
@@ -112,23 +113,24 @@ export default function UserTable({
           await refreshData();
           closeModal();
         } catch (err) {
-          console.error(err);
+          console.error("Date update error:", err);
         }
       },
+      "info",
     );
   };
 
   const handleDeleteUser = (userId: string, userName: string) => {
     openModal(
       "Видалення",
-      `Видалити користувача ${userName}?`,
+      `Ви впевнені, що хочете видалити користувача ${userName}? Цю дію неможливо скасувати.`,
       async () => {
         try {
           await adminService.deleteUser(userId);
           await refreshData();
           closeModal();
         } catch (err) {
-          console.error(err);
+          console.error("Delete error:", err);
         }
       },
       "danger",
