@@ -7,7 +7,7 @@ export interface QuestionOption {
 }
 
 export interface Question {
-  _id?: string;
+  _id: string;
   id: string;
   question: string;
   options: QuestionOption[] | string[];
@@ -20,9 +20,12 @@ export interface Question {
 const getJwtFromCookies = (): string | null => {
   if (typeof document === "undefined") return null;
   const cookies = document.cookie.split("; ");
-  const tokenValue = cookies.find((row) => row.startsWith("token="))?.split("=")[1];
+  const tokenValue = cookies
+    .find((row) => row.startsWith("token="))
+    ?.split("=")[1];
   if (tokenValue && tokenValue.startsWith("eyJ")) return tokenValue;
-  const fallback = localStorage.getItem("accessToken") || localStorage.getItem("token");
+  const fallback =
+    localStorage.getItem("accessToken") || localStorage.getItem("token");
   if (fallback && fallback.startsWith("eyJ")) return fallback;
   return null;
 };
@@ -41,10 +44,13 @@ export const testAdminService = {
     return response.json();
   },
 
-  saveQuestion: async (formData: FormData, id?: string): Promise<Question> => {
+  saveQuestion: async (
+    formData: FormData,
+    mongoId?: string,
+  ): Promise<Question> => {
     const token = getJwtFromCookies();
-    const url = id ? `${BASE_URL}/${id}` : BASE_URL;
-    const method = id ? "PATCH" : "POST";
+    const url = mongoId ? `${BASE_URL}/${mongoId}` : BASE_URL;
+    const method = mongoId ? "PUT" : "POST";
 
     const response = await fetch(url, {
       method: method,
@@ -62,9 +68,9 @@ export const testAdminService = {
     return response.json();
   },
 
-  deleteQuestion: async (id: string): Promise<void> => {
+  deleteQuestion: async (mongoId: string): Promise<void> => {
     const token = getJwtFromCookies();
-    const response = await fetch(`${BASE_URL}/${id}`, {
+    const response = await fetch(`${BASE_URL}/${mongoId}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });
