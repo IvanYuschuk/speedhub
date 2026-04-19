@@ -1,0 +1,180 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f4f7fa;
+  overflow: hidden;
+  position: relative;
+  padding: 20px;
+}
+
+.content {
+  text-align: center;
+  z-index: 2;
+  max-width: 500px;
+}
+
+.errorCode {
+  font-size: 120px;
+  font-weight: 900;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  margin-bottom: 24px;
+  gap: 10px;
+}
+
+/* Стилізація знака "В'їзд заборонено" (Цегла) замість нуля */
+.roadSign {
+  width: 100px;
+  height: 100px;
+  background: #ef4444;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+}
+
+.bar {
+  width: 60px;
+  height: 16px;
+  background: white;
+  border-radius: 4px;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 16px;
+}
+
+.text {
+  font-size: 16px;
+  color: #64748b;
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.homeBtn {
+  background: #3b82f6;
+  color: white;
+  padding: 14px 28px;
+  border-radius: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.homeBtn:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+}
+
+.backBtn {
+  background: white;
+  color: #1e293b;
+  border: 1px solid #e2e8f0;
+  padding: 14px 28px;
+  border-radius: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.backBtn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+/* Декоративні дорожні лінії на фоні */
+.bgDecor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.line {
+  position: absolute;
+  width: 200%;
+  height: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    #cbd5e1,
+    #cbd5e1 40px,
+    transparent 40px,
+    transparent 80px
+  );
+  transform: rotate(-35deg);
+}
+
+.line:nth-child(1) {
+  top: 20%;
+  left: -50%;
+}
+.line:nth-child(2) {
+  top: 50%;
+  left: -60%;
+}
+.line:nth-child(3) {
+  top: 80%;
+  left: -40%;
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  .container {
+    background: #0f172a;
+  }
+  .errorCode,
+  .title {
+    color: #f8fafc;
+  }
+  .text {
+    color: #94a3b8;
+  }
+  .backBtn {
+    background: #1e293b;
+    border-color: #334155;
+    color: #f1f5f9;
+  }
+  .backBtn:hover {
+    background: #334155;
+  }
+  .bgDecor {
+    opacity: 0.1;
+  }
+}
+
+@media (max-width: 480px) {
+  .errorCode {
+    font-size: 80px;
+  }
+  .roadSign {
+    width: 70px;
+    height: 70px;
+  }
+  .bar {
+    width: 40px;
+    height: 12px;
+  }
+  .actions {
+    flex-direction: column;
+  }
+}

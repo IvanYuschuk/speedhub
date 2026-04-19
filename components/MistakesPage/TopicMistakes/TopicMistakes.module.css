@@ -1,0 +1,113 @@
+.wrapper {
+  margin: 32px 0;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #1e293b;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* По 2 в ряд */
+  gap: 12px;
+}
+
+.themeCard {
+  background: #ffffff;
+  padding: 14px 20px;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.allMistakesCard {
+  background: #f0f7ff;
+  border-color: #3b82f6;
+}
+
+.allMistakesCard:hover {
+  background: #e0efff !important;
+}
+
+.themeCard:hover {
+  border-color: #3b82f6;
+  background: #f8faff;
+  transform: translateY(-2px);
+}
+
+.themeInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.themeNumber {
+  font-size: 11px;
+  font-weight: 800;
+  color: #3b82f6;
+  text-transform: uppercase;
+}
+
+.themeTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #334155;
+  line-height: 1.3;
+}
+
+.counter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 60px;
+}
+
+.count {
+  font-size: 16px;
+  font-weight: 800;
+  color: #ef4444;
+}
+
+.allCount {
+  font-size: 16px;
+  font-weight: 800;
+  color: #3b82f6;
+}
+
+.label {
+  font-size: 10px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+@media (prefers-color-scheme: dark) {
+  .themeCard {
+    background: #1e293b;
+    border-color: rgba(255, 255, 255, 0.05);
+  }
+  .allMistakesCard {
+    background: rgba(59, 130, 246, 0.1);
+  }
+  .themeTitle {
+    color: #f1f5f9;
+  }
+  .themeCard:hover {
+    background: rgba(59, 130, 246, 0.05);
+  }
+  .title {
+    color: #f1f5f9;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
