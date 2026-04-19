@@ -1,7 +1,5 @@
-// app/services/testAdminService.ts
 const BASE_URL = "https://speedhub-6fam.onrender.com/api/questions";
 
-// Оновлений інтерфейс, що відповідає реальним даним з твого БД/Бекенда
 export interface QuestionOption {
   _id?: string;
   id: number;
@@ -9,21 +7,29 @@ export interface QuestionOption {
 }
 
 export interface Question {
-  _id?: string; // MongoDB ID
-  id: string; // Твій кастомний ID (напр. r2q3)
+  _id?: string;
+  id: string;
   question: string;
-  options: QuestionOption[] | string[]; // Може бути і так, і так (після JSON.parse)
-  correct_option_id: number; // Саме так воно в JSON
+  options: QuestionOption[] | string[];
+  correct_option_id: number;
   category?: string;
-  image?: string[]; // Поле в однині, як у JSON
+  image?: string[];
   explanation?: string;
 }
 
+const getJwtFromCookies = (): string | null => {
+  if (typeof document === "undefined") return null;
+  const cookies = document.cookie.split("; ");
+  const tokenValue = cookies.find((row) => row.startsWith("token="))?.split("=")[1];
+  if (tokenValue && tokenValue.startsWith("eyJ")) return tokenValue;
+  const fallback = localStorage.getItem("accessToken") || localStorage.getItem("token");
+  if (fallback && fallback.startsWith("eyJ")) return fallback;
+  return null;
+};
+
 export const testAdminService = {
-  /**
-   * Отримати всі питання
-   */
-  getAllQuestions: async (token: string | null): Promise<Question[]> => {
+  getAllQuestions: async (): Promise<Question[]> => {
+    const token = getJwtFromCookies();
     const response = await fetch(BASE_URL, {
       method: "GET",
       headers: {
@@ -35,15 +41,8 @@ export const testAdminService = {
     return response.json();
   },
 
-  /**
-   * Універсальний метод збереження
-   */
-  saveQuestion: async (
-    formData: FormData,
-    token: string | null,
-    id?: string,
-  ): Promise<Question> => {
-    // Якщо ми редагуємо, додаємо id до URL
+  saveQuestion: async (formData: FormData, id?: string): Promise<Question> => {
+    const token = getJwtFromCookies();
     const url = id ? `${BASE_URL}/${id}` : BASE_URL;
     const method = id ? "PATCH" : "POST";
 
@@ -51,7 +50,6 @@ export const testAdminService = {
       method: method,
       headers: {
         Authorization: `Bearer ${token}`,
-        // Content-Type для FormData НЕ СТАВИМО
       },
       body: formData,
     });
@@ -64,15 +62,12 @@ export const testAdminService = {
     return response.json();
   },
 
-  /**
-   * Видалити питання
-   */
-  deleteQuestion: async (id: string, token: string | null): Promise<void> => {
+  deleteQuestion: async (id: string): Promise<void> => {
+    const token = getJwtFromCookies();
     const response = await fetch(`${BASE_URL}/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });
-
     if (!response.ok) throw new Error("Не вдалося видалити питання");
   },
 };

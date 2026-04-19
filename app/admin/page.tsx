@@ -13,29 +13,25 @@ import styles from "./AdminPage.module.css";
 export default function AdminPage() {
   const [activeTab, setActiveTab] = useState("users");
   const [isAuthorized, setIsAuthorized] = useState(false);
-  const [token, setToken] = useState<string | null>(null);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    // Беремо токен відразу
-    const storedToken = localStorage.getItem("token") || localStorage.getItem("accessToken");
     const role = localStorage.getItem("role");
+    const token = localStorage.getItem("token") || localStorage.getItem("accessToken");
 
-    if (role === "admin" && storedToken && storedToken !== "undefined") {
-      setToken(storedToken);
+    if (role === "admin" && token && token !== "undefined") {
       setIsAuthorized(true);
     } else {
       router.push("/");
     }
   }, [router]);
 
-  const loadUsers = useCallback(async (currentIdToken: string) => {
-    if (!currentIdToken || currentIdToken === "undefined") return;
+  const loadUsers = useCallback(async () => {
     try {
       setLoading(true);
-      const data = await adminService.getAllUsers(currentIdToken);
+      const data = await adminService.getAllUsers();
       setUsers(data || []);
     } catch (err) {
       console.error("Fetch error:", err);
@@ -45,12 +41,12 @@ export default function AdminPage() {
   }, []);
 
   useEffect(() => {
-    if (isAuthorized && token && activeTab === "users") {
-      loadUsers(token);
+    if (isAuthorized && activeTab === "users") {
+      loadUsers();
     }
-  }, [isAuthorized, token, activeTab, loadUsers]);
+  }, [isAuthorized, activeTab, loadUsers]);
 
-  if (!isAuthorized || !token) return null;
+  if (!isAuthorized) return null;
 
   return (
     <div className={styles.adminContainer}>
@@ -65,11 +61,10 @@ export default function AdminPage() {
           <UserTable
             users={users}
             loading={loading}
-            refreshData={() => loadUsers(token)}
-            token={token}
+            refreshData={loadUsers}
           />
         )}
-        {activeTab === "tests" && <TestManager token={token} />}
+        {activeTab === "tests" && <TestManager />}
       </main>
     </div>
   );
