@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { testAdminService, Question } from "@/app/services/testAdminService";
 import EditQuestionModal from "@/components/AdminPage/EditQuestionModal/EditQuestionModal";
+import ConfirmModal from "@/components/Modals/ConfirmModal/ConfirmModal";
 import styles from "./TestManager.module.css";
 
 export default function TestManager() {
@@ -11,6 +12,16 @@ export default function TestManager() {
   const [selectedTopic, setSelectedTopic] = useState<string>("all");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
+
+  const [confirmConfig, setConfirmConfig] = useState<{
+    isOpen: boolean;
+    mongoId: string;
+    questionId: string;
+  }>({
+    isOpen: false,
+    mongoId: "",
+    questionId: "",
+  });
 
   const loadQuestions = useCallback(async () => {
     try {
@@ -30,7 +41,7 @@ export default function TestManager() {
 
   const handleSave = async (formData: FormData) => {
     try {
-      await testAdminService.saveQuestion(formData, editingQuestion?.id);
+      await testAdminService.saveQuestion(formData, editingQuestion?._id);
       setIsModalOpen(false);
       loadQuestions();
     } catch (err) {
@@ -38,11 +49,23 @@ export default function TestManager() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Ви впевнені, що хочете видалити це питання?")) return;
+  const openDeleteConfirm = (mongoId: string, questionId: string) => {
+    setConfirmConfig({
+      isOpen: true,
+      mongoId,
+      questionId,
+    });
+  };
+
+  const closeDeleteConfirm = () => {
+    setConfirmConfig((prev) => ({ ...prev, isOpen: false }));
+  };
+
+  const handleConfirmDelete = async () => {
     try {
-      await testAdminService.deleteQuestion(id);
+      await testAdminService.deleteQuestion(confirmConfig.mongoId);
       loadQuestions();
+      closeDeleteConfirm();
     } catch (err) {
       alert("Помилка при видаленні!");
     }
@@ -113,7 +136,7 @@ export default function TestManager() {
         </thead>
         <tbody>
           {filteredQuestions.map((q) => (
-            <tr key={q.id} className={styles.tableRow}>
+            <tr key={q._id} className={styles.tableRow}>
               <td className={styles.tableCell}>
                 <strong className={styles.idBadge}>{q.id}</strong>
               </td>
@@ -129,7 +152,7 @@ export default function TestManager() {
                 </button>
                 <button
                   className={styles.deleteButton}
-                  onClick={() => handleDelete(q.id)}
+                  onClick={() => openDeleteConfirm(q._id, q.id)}
                 >
                   Видалити
                 </button>
@@ -146,6 +169,16 @@ export default function TestManager() {
           onSave={handleSave}
         />
       )}
+
+      <ConfirmModal
+        isOpen={confirmConfig.isOpen}
+        title="Видалення питання"
+        message={`Ви впевнені, що хочете видалити питання ${confirmConfig.questionId}? Цю дію неможливо скасувати.`}
+        onConfirm={handleConfirmDelete}
+        onCancel={closeDeleteConfirm}
+        type="danger"
+        confirmText="Видалити"
+      />
     </div>
   );
 }

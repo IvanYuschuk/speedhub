@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import css from './ExamPage.module.css';
 import { useQuery } from '@tanstack/react-query';
 import { getExamTest } from '@/lib/api';
+import { userService } from '@/app/services/userService';
 import QuestionStepper from '@/components/TestPage/QuestionStepper/QuestionStepper';
 import TestProgress from '@/components/TestPage/TestProgress/TestProgress';
 import QuestionContent from '@/components/TestPage/QuestionContent/QuestionContent';
@@ -32,12 +33,10 @@ const ExamPageClient = () => {
     const [checkedAnswers, setCheckedAnswers] = useState<Record<string, boolean>>({});
     const [wrongAnswerCount, setWrongAnswerCount] = useState(0);
     const [timeLeft, setTimeLeft] = useState(1200);
+    const [isSaved, setIsSaved] = useState(false);
 
     useEffect(() => {
-        window.scrollTo({
-            top: 0, 
-            behavior: 'smooth' 
-        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [currentIndex]);
 
     const { data: tests } = useQuery({
@@ -50,26 +49,42 @@ const ExamPageClient = () => {
     const totalQuestions = tests?.length || 0;
     const isCurrentChecked = checkedAnswers[currentQuestion.id];
 
+    useEffect(() => {
+        if (isFinished && !isSaved && tests) {
+            const correctCount = tests.reduce((acc, q) => 
+                selectedAnswers[q.id] === q.correct_option_id ? acc + 1 : acc, 0
+            );
+
+            userService.updateStats('exam', {
+                correctAnswers: correctCount,
+                incorrectAnswers: wrongAnswerCount,
+                totalQuestions: totalQuestions,
+                timeSpent: 1200 - timeLeft
+            }).then(() => setIsSaved(true)).catch(err => console.error(err));
+        }
+    }, [isFinished, isSaved, tests, selectedAnswers, wrongAnswerCount, totalQuestions, timeLeft]);
+
     const handleOptionSelect = (optionId: number) => {
         if (isCurrentChecked) return;
         setSelectedAnswers(prev => ({ ...prev, [currentQuestion.id]: optionId }));
     };
+
     const handleCheckAnswer = () => {
         setCheckedAnswers(prev => ({ ...prev, [currentQuestion.id]: true }));
         if (selectedAnswers[currentQuestion.id] !== currentQuestion.correct_option_id) {
-            setWrongAnswerCount(prev => prev + 1);
-            console.log(wrongAnswerCount)
-            console.log("не правильна відповідь");
-            if (wrongAnswerCount === 2) {
-                setIsFinished(true);
-            }
+            const nextWrong = wrongAnswerCount + 1;
+            setWrongAnswerCount(nextWrong);
+            if (nextWrong >= 3) setIsFinished(true);
         };
     }
+
     const handleNext = () => currentIndex < totalQuestions - 1 && setCurrentIndex(prev => prev + 1);
     const handlePrev = () => currentIndex > 0 &&  setCurrentIndex(prev => prev - 1);
     const handleFinish = () => setIsFinished(true);
+    
     const handleRetry = () => {
         setIsFinished(false);
+        setIsSaved(false);
         setCurrentIndex(0);
         setSelectedAnswers({});
         setCheckedAnswers({});
@@ -77,45 +92,30 @@ const ExamPageClient = () => {
         setTimeLeft(1200);
     };
     
-     useEffect(() => {
-        // Якщо тест завершено або час вийшов — зупиняємо таймер
+    useEffect(() => {
         if (isFinished || timeLeft <= 0) return;
         const timerId = setInterval(() => {
-            setTimeLeft((prevTime) => {
-                if (prevTime <= 1) {
+            setTimeLeft((prev) => {
+                if (prev <= 1) {
                     clearInterval(timerId);
-                    handleFinish(); // Автоматично завершуємо тест, якщо час вийшов
+                    handleFinish();
                     return 0;
                 }
-                return prevTime - 1;
+                return prev - 1;
             });
         }, 1000);
-
-        // Очищення інтервалу при розмонтуванні компонента
         return () => clearInterval(timerId);
     }, [isFinished, timeLeft]); 
 
     if (isFinished) {
-        const correctAnswersCount = tests?.reduce((acc, question) => {
-            return selectedAnswers[question.id] === question.correct_option_id ? acc + 1 : acc;
-        }, 0);
+        const correctCount = tests?.reduce((acc, q) => 
+            selectedAnswers[q.id] === q.correct_option_id ? acc + 1 : acc, 0
+        ) || 0;
 
-        if (correctAnswersCount !== undefined && correctAnswersCount > 17) {
-            return (
-                <section className={css.section}>
-                    <div className={css.container}>
-                       <ExamSuccess onRetry={handleRetry}/>
-                    </div>
-                </section>
-            );
+        if (correctCount > 17 && wrongAnswerCount <= 2) {
+            return <section className={css.section}><div className={css.container}><ExamSuccess onRetry={handleRetry}/></div></section>;
         } else {
-            return (
-                <section className={css.section}>
-                    <div className={css.container}>
-                        <ExamFail onRetry={handleRetry} mistakesCount={wrongAnswerCount}/>
-                    </div>
-                </section>
-            );
+            return <section className={css.section}><div className={css.container}><ExamFail onRetry={handleRetry} mistakesCount={wrongAnswerCount}/></div></section>;
         }
     }
 
@@ -123,38 +123,12 @@ const ExamPageClient = () => {
         <section className={css.section}>
             <div className={css.container}>
                 <div className={css.testWrapper}>
-                    <QuestionStepper
-                        questions={tests || []}
-                        currentIndex={currentIndex}
-                        checkedAnswers={checkedAnswers}
-                        selectedAnswers={selectedAnswers}
-                        onStepClick={setCurrentIndex}
-                    />
+                    <QuestionStepper questions={tests || []} currentIndex={currentIndex} checkedAnswers={checkedAnswers} selectedAnswers={selectedAnswers} onStepClick={setCurrentIndex} />
                     <Timer timeLeft={timeLeft}/>
-                   
-                    <TestProgress
-                        currentIndex={currentIndex}
-                        totalQuestions={totalQuestions}
-                    />
-                    <QuestionContent
-                        question={currentQuestion}
-                    />
-                    <QuestionOptions
-                        question={currentQuestion}
-                        selectedAnswerId={selectedAnswers[currentQuestion.id]}
-                        isCurrentChecked={isCurrentChecked}
-                        onOptionSelect={handleOptionSelect}
-                    />
-                    <TestControls
-                        currentIndex={currentIndex}
-                        totalQuestions={totalQuestions}
-                        isCurrentChecked={isCurrentChecked}
-                        hasSelectedAnswer={!!selectedAnswers[currentQuestion.id]}
-                        onPrev={handlePrev}
-                        onNext={handleNext}
-                        onCheck={handleCheckAnswer}
-                        onFinish={handleFinish}
-                    />
+                    <TestProgress currentIndex={currentIndex} totalQuestions={totalQuestions} />
+                    <QuestionContent question={currentQuestion} />
+                    <QuestionOptions question={currentQuestion} selectedAnswerId={selectedAnswers[currentQuestion.id]} isCurrentChecked={isCurrentChecked} onOptionSelect={handleOptionSelect} />
+                    <TestControls currentIndex={currentIndex} totalQuestions={totalQuestions} isCurrentChecked={isCurrentChecked} hasSelectedAnswer={!!selectedAnswers[currentQuestion.id]} onPrev={handlePrev} onNext={handleNext} onCheck={handleCheckAnswer} onFinish={handleFinish} />
                 </div>
             </div>
         </section>

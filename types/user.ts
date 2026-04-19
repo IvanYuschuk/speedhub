@@ -6,8 +6,24 @@ export interface User {
   role: "user" | "admin";
   subscriptionType: "free" | "premium";
   subscriptionExpires: string | null;
-  createdAt: string;
-  updatedAt: string;
+  statistics: {
+    unitsPassed: Array<{
+      unitId: string;
+      correctAnswers: number;
+      incorrectAnswers: number;
+      totalQuestions: number;
+      timeSpent: number;
+      isPassed: boolean;
+      date: string;
+    }>;
+    randomTests: Array<{
+      score: number;
+      total: number;
+      incorrectAnswers: number;
+      timeSpent: number;
+      date: string;
+    }>;
+  };
 }
 
 export interface AuthResponse {

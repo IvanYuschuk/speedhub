@@ -22,11 +22,27 @@ export interface User {
   name: string;
   surname: string;
   email: string;
+  role: "user" | "admin";
   subscriptionType: "free" | "premium";
   subscriptionExpires: string | null;
-  statistics: UserStatistics;
-  createdAt: string;
-  updatedAt: string;
+  statistics: {
+    unitsPassed: Array<{
+      unitId: string;
+      correctAnswers: number;
+      incorrectAnswers: number;
+      totalQuestions: number;
+      timeSpent: number;
+      isPassed: boolean;
+      date: string;
+    }>;
+    randomTests: Array<{
+      score: number;
+      total: number;
+      incorrectAnswers: number;
+      timeSpent: number;
+      date: string;
+    }>;
+  };
 }
 
 export interface RegisterData {
