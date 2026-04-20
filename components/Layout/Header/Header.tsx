@@ -9,8 +9,11 @@ import LoginForm from "../../Modals/LoginForm/LoginForm";
 import UserAccount from "../../Modals/UserAccount/UserAccount";
 import { usePathname } from "next/navigation";
 import { getUserName } from "@/app/utils/auth";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
+  const router = useRouter();
+
   const pathname = usePathname();
   const [userName, setUserName] = useState<string | null>(null);
   const [isUserAccountOpen, setIsUserAccountOpen] = useState(false);
@@ -197,7 +200,9 @@ const Header = () => {
                     className={`${css.button} ${css.loginButton} ${css.fullWidthBtn}`}
                     onClick={() => {
                       setIsUserAccountOpen(true);
+                      
                       closeMenu();
+                      router.push("/mistakes");
                     }}
                   >
                     Мій кабінет ({userName})
